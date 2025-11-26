@@ -3,98 +3,120 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Generador de Reportes Excel</title>
+    <title>Generador de Reportes OOCC</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <header>
-      <h1>Generador de Reportes Excel</h1>
-      <p>App web básica conectada al backend Node.js</p>
+      <h1>Generador de Reportes OOCC</h1>
+      <p>Sistema Piloto - Conexión a Plantilla Excel</p>
     </header>
 
     <main>
       <section class="card">
-        <h2>1. Crear reporte y subir foto</h2>
+        <h2>📄 Datos de la Inspección</h2>
         <form id="reporte-form">
           <div class="form-grid">
+            
+            <!-- CAMPO 1: SITE (E20) -->
             <label>
-              Nombre del reporte
-              <input type="text" name="nombreReporte" placeholder="Reporte de inspección" required />
+              Nombre del Site / Estación
+              <input type="text" name="nombreSite" placeholder="Ej: TORRE LIMA CENTRO" required />
             </label>
 
+            <!-- CAMPO 2: INSPECTOR (D28) -->
             <label>
-              Fecha
-              <input type="date" name="fecha" required />
+              Nombre del Inspector
+              <input type="text" name="nombreInspector" placeholder="Ej: Ing. Anthony Chile" required />
             </label>
 
+            <!-- CAMPO 3: FECHA (F30) -->
             <label>
-              Descripción
-              <textarea name="descripcion" rows="3" placeholder="Detalle del reporte" required></textarea>
+              Fecha de Inspección
+              <input type="date" name="fechaInspeccion" required />
             </label>
 
+            <!-- CAMPO 4: FOTO (B11) -->
             <label>
-              Celda para el título (ej: A1)
-              <input type="text" name="celdaTitulo" value="A1" required />
+              Foto de Evidencia (Hoja 4)
+              <input type="file" name="foto" accept="image/*" required />
             </label>
 
-            <label>
-              Celda para la descripción (ej: A2)
-              <input type="text" name="celdaDescripcion" value="A2" required />
-            </label>
-
-            <label>
-              Celda para la foto (ej: C4)
-              <input type="text" name="celdaFoto" value="C4" required />
-            </label>
-
-            <label>
-              Imagen / Foto
-              <input type="file" name="foto1" accept="image/*" required />
-            </label>
+             <!-- CAMPO 5: DESCRIPCIÓN -->
+             <label>
+                Descripción de la Foto
+                <input type="text" name="descripcionFoto" placeholder="Ej: Vista panorámica de la estructura" />
+              </label>
           </div>
 
-          <button type="submit" class="primary">Generar Reporte</button>
+          <button type="submit" class="primary" id="btnGenerar">Generar y Descargar Excel</button>
         </form>
 
-        <div id="form-status" class="status"></div>
+        <div id="form-status" class="status" style="margin-top: 1rem; text-align: center; font-weight: bold;"></div>
       </section>
 
-      <section class="card">
-        <div class="card-header">
-          <h2>2. Reportes generados</h2>
-          <button id="refresh-reportes" class="secondary">Actualizar lista</button>
-        </div>
-        <div id="reportes-status" class="status"></div>
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Estado</th>
-                <th>Archivo</th>
-                <th>Creado</th>
-              </tr>
-            </thead>
-            <tbody id="reportes-body">
-              <tr>
-                <td colspan="5" class="text-center">Sin datos todavía</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
+      <!-- Nota: He ocultado temporalmente la tabla de reportes anteriores porque 
+           ahora estamos generando descargas directas sin base de datos -->
     </main>
 
     <footer>
       <small>
-        Backend: <code>http://localhost:3000</code> (puedes cambiarlo en <code>app.js</code>)
+        Backend conectado a: <code>backend-reportes-excel.onrender.com</code>
       </small>
     </footer>
 
-    <script src="app.js"></script>
+    <script>
+        document.getElementById('reporte-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const btn = document.getElementById('btnGenerar');
+            const statusDiv = document.getElementById('form-status');
+            const formData = new FormData(e.target);
+
+            // 1. ESTADO DE CARGA
+            btn.disabled = true;
+            btn.textContent = "⏳ Procesando...";
+            statusDiv.textContent = "Conectando con el servidor y generando Excel...";
+            statusDiv.style.color = "blue";
+
+            try {
+                // ⚠️ URL DE TU BACKEND EN RENDER
+                const URL_BACKEND = "https://backend-reportes-excel.onrender.com/generar-reporte";
+
+                // 2. PETICIÓN AL SERVIDOR
+                const response = await fetch(URL_BACKEND, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(errorText || "Error al conectar con el servidor");
+                }
+
+                // 3. DESCARGAR ARCHIVO
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                // Intentamos sacar el nombre del archivo de la respuesta, si no, uno genérico
+                a.download = "Reporte_OOCC.xlsx"; 
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+
+                statusDiv.textContent = "✅ ¡Excel descargado con éxito!";
+                statusDiv.style.color = "green";
+
+            } catch (error) {
+                console.error(error);
+                statusDiv.textContent = "❌ Error: " + error.message;
+                statusDiv.style.color = "red";
+            } finally {
+                btn.disabled = false;
+                btn.textContent = "Generar y Descargar Excel";
+            }
+        });
+    </script>
   </body>
 </html>
-
-
-
