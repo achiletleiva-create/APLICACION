@@ -1,122 +1,209 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Generador de Reportes OOCC</title>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte OOCC - Insp. Estructura</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Estilos extra para simular las secciones del Excel */
+        .excel-section {
+            border: 1px solid #cbd5f5;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+        .excel-header {
+            background-color: #3b82f6; /* Azul similar al Excel */
+            color: white;
+            padding: 0.5rem 1rem;
+            font-weight: bold;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+        .excel-body {
+            padding: 1rem;
+            background-color: white;
+        }
+    </style>
+</head>
+<body>
     <header>
-      <h1>Generador de Reportes OOCC</h1>
-      <p>Sistema Piloto - Conexión a Plantilla Excel</p>
+        <h1>Generador de Reportes OOCC</h1>
+        <p>Llenado Automático: Hoja "Insp. Estructura"</p>
     </header>
 
     <main>
-      <section class="card">
-        <h2>📄 Datos de la Inspección</h2>
         <form id="reporte-form">
-          <div class="form-grid">
             
-            <!-- CAMPO 1: SITE (E20) -->
-            <label>
-              Nombre del Site / Estación
-              <input type="text" name="nombreSite" placeholder="Ej: TORRE LIMA CENTRO" required />
-            </label>
+            <!-- SECCIÓN I: DATOS DEL COOPERADOR -->
+            <div class="excel-section">
+                <div class="excel-header">I. DATOS DEL COOPERADOR (PERSONAL 01)</div>
+                <div class="excel-body">
+                    <div class="form-grid">
+                        <label>Nombre Personal 01
+                            <input type="text" name="cooperador_nombre" placeholder="Ej: Juan Pérez" />
+                        </label>
+                        <label>Cargo
+                            <input type="text" name="cooperador_cargo" placeholder="Ej: Técnico" />
+                        </label>
+                        <label>Empresa
+                            <input type="text" name="cooperador_empresa" placeholder="Ej: Contratista SAC" />
+                        </label>
+                        <label>DNI
+                            <input type="text" name="cooperador_dni" placeholder="Ej: 4589..." />
+                        </label>
+                    </div>
+                </div>
+            </div>
 
-            <!-- CAMPO 2: INSPECTOR (D28) -->
-            <label>
-              Nombre del Inspector
-              <input type="text" name="nombreInspector" placeholder="Ej: Ing. Anthony Chile" required />
-            </label>
+            <!-- SECCIÓN II: DATOS DEL PROYECTO Y SITE -->
+            <div class="excel-section">
+                <div class="excel-header">II. DATOS DEL PROYECTO Y SITE</div>
+                <div class="excel-body">
+                    <div class="form-grid">
+                        <label>Nombre Site (E20)
+                            <input type="text" name="site_nombre" placeholder="Ej: TORRE LIMA" required />
+                        </label>
+                        <label>Proyecto (G20)
+                            <input type="text" name="site_proyecto" placeholder="Ej: 5G - Rollout" />
+                        </label>
+                        <label>Dirección (E22)
+                            <input type="text" name="site_direccion" placeholder="Av. Siempre Viva 123" />
+                        </label>
+                        <label>Dpto., Prov., Distrito (C24)
+                            <input type="text" name="site_distrito" placeholder="Lima, Lima, Miraflores" />
+                        </label>
+                        <label>Tipo de Sitio (G24)
+                            <input type="text" name="site_tipo" placeholder="Ej: Rooftop / Greenfield" />
+                        </label>
+                    </div>
+                </div>
+            </div>
 
-            <!-- CAMPO 3: FECHA (F30) -->
-            <label>
-              Fecha de Inspección
-              <input type="date" name="fechaInspeccion" required />
-            </label>
+            <!-- SECCIÓN III: DATOS DEL INSPECTOR -->
+            <div class="excel-section">
+                <div class="excel-header">III. DATOS DEL INSPECTOR</div>
+                <div class="excel-body">
+                    <div class="form-grid">
+                        <label>Nombre Inspector (Personal 01)
+                            <input type="text" name="inspector_nombre" placeholder="Ej: Ing. Anthony Chile" required />
+                        </label>
+                        <label>Cargo
+                            <input type="text" name="inspector_cargo" placeholder="Ej: Supervisor Senior" />
+                        </label>
+                        <label>Empresa
+                            <input type="text" name="inspector_empresa" placeholder="Ej: Entel / Consultora" />
+                        </label>
+                        <label>Fecha Inicio Supervisión (F30)
+                            <input type="date" name="fecha_inspeccion" required />
+                        </label>
+                    </div>
+                </div>
+            </div>
 
-            <!-- CAMPO 4: FOTO (B11) -->
-            <label>
-              Foto de Evidencia (Hoja 4)
-              <input type="file" name="foto" accept="image/*" required />
-            </label>
+            <!-- SECCIÓN IV: PRUEBA DE CHECKLIST (Cimentación) -->
+            <!-- Solo ponemos 3 ejemplos para probar la lógica -->
+            <div class="excel-section">
+                <div class="excel-header">IV. CHECKLIST (CIMENTACIÓN - CONCRETO)</div>
+                <div class="excel-body">
+                    <p style="font-size: 0.8rem; margin-bottom:1rem; color:gray;">Ejemplo de preguntas (1-3):</p>
+                    <div class="form-grid">
+                        <label>1. Fisuras en concreto (SI/NO)
+                            <select name="check_1">
+                                <option value="">- Seleccionar -</option>
+                                <option value="SI">SI</option>
+                                <option value="NO">NO</option>
+                                <option value="NA">NA</option>
+                            </select>
+                        </label>
+                        <label>2. Desprendimientos (SI/NO)
+                            <select name="check_2">
+                                <option value="">- Seleccionar -</option>
+                                <option value="SI">SI</option>
+                                <option value="NO">NO</option>
+                                <option value="NA">NA</option>
+                            </select>
+                        </label>
+                        <label>3. Humedad (SI/NO)
+                            <select name="check_3">
+                                <option value="">- Seleccionar -</option>
+                                <option value="SI">SI</option>
+                                <option value="NO">NO</option>
+                                <option value="NA">NA</option>
+                            </select>
+                        </label>
+                    </div>
+                </div>
+            </div>
 
-             <!-- CAMPO 5: DESCRIPCIÓN -->
-             <label>
-                Descripción de la Foto
-                <input type="text" name="descripcionFoto" placeholder="Ej: Vista panorámica de la estructura" />
-              </label>
-          </div>
+            <!-- FOTOS -->
+            <div class="card">
+                <h2>📸 Evidencia Fotográfica</h2>
+                <div class="form-grid">
+                    <label>Foto Principal (Hoja 4 - B11)
+                        <input type="file" name="foto" accept="image/*" required />
+                    </label>
+                    <label>Descripción de la Foto
+                        <input type="text" name="descripcionFoto" placeholder="Descripción breve..." />
+                    </label>
+                </div>
+                <br>
+                <button type="submit" class="primary" id="btnGenerar" style="width: 100%;">Generar Reporte Excel</button>
+            </div>
 
-          <button type="submit" class="primary" id="btnGenerar">Generar y Descargar Excel</button>
+            <div id="form-status" class="status text-center"></div>
         </form>
-
-        <div id="form-status" class="status" style="margin-top: 1rem; text-align: center; font-weight: bold;"></div>
-      </section>
-
-      <!-- Nota: He ocultado temporalmente la tabla de reportes anteriores porque 
-           ahora estamos generando descargas directas sin base de datos -->
     </main>
-
-    <footer>
-      <small>
-        Backend conectado a: <code>backend-reportes-excel.onrender.com</code>
-      </small>
-    </footer>
 
     <script>
         document.getElementById('reporte-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
             const btn = document.getElementById('btnGenerar');
             const statusDiv = document.getElementById('form-status');
+            
+            // Recolectar datos
             const formData = new FormData(e.target);
 
-            // 1. ESTADO DE CARGA
+            // UI Loading
             btn.disabled = true;
-            btn.textContent = "⏳ Procesando...";
-            statusDiv.textContent = "Conectando con el servidor y generando Excel...";
-            statusDiv.style.color = "blue";
+            btn.textContent = "⏳ Procesando Excel...";
+            statusDiv.textContent = "Inyectando datos en la plantilla...";
+            statusDiv.className = "status";
 
             try {
-                // ⚠️ URL DE TU BACKEND EN RENDER
-                const URL_BACKEND = "https://backend-reportes-excel.onrender.com/generar-reporte";
-
-                // 2. PETICIÓN AL SERVIDOR
+                // CAMBIAR POR TU URL REAL EN RENDER
+                const URL_BACKEND = "https://backend-reportes-excel.onrender.com/generar-reporte"; 
+                
                 const response = await fetch(URL_BACKEND, {
                     method: 'POST',
                     body: formData
                 });
 
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error(errorText || "Error al conectar con el servidor");
-                }
+                if (!response.ok) throw new Error(await response.text());
 
-                // 3. DESCARGAR ARCHIVO
+                // Descargar
                 const blob = await response.blob();
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                // Intentamos sacar el nombre del archivo de la respuesta, si no, uno genérico
-                a.download = "Reporte_OOCC.xlsx"; 
+                a.download = `Reporte_${formData.get('site_nombre') || 'OOCC'}.xlsx`;
                 document.body.appendChild(a);
                 a.click();
                 a.remove();
 
-                statusDiv.textContent = "✅ ¡Excel descargado con éxito!";
-                statusDiv.style.color = "green";
+                statusDiv.textContent = "✅ ¡Reporte generado correctamente!";
+                statusDiv.classList.add('success');
 
             } catch (error) {
                 console.error(error);
                 statusDiv.textContent = "❌ Error: " + error.message;
-                statusDiv.style.color = "red";
+                statusDiv.classList.add('error');
             } finally {
                 btn.disabled = false;
-                btn.textContent = "Generar y Descargar Excel";
+                btn.textContent = "Generar Reporte Excel";
             }
         });
     </script>
-  </body>
+</body>
 </html>
