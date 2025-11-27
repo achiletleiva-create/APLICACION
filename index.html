@@ -1,685 +1,303 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reporte de Inspección Estructural - Entel</title>
-    <style>
-        /* ESTILOS BASE */
-        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f6f9; }
-        
-        .excel-container {
-            width: 100%;
-            max-width: 1300px;
-            margin: 0 auto;
-            border: 1px solid #c0c0c0;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            background-color: white;
-            padding: 15px;
-        }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte de Inspección Estructural - Entel</title>
+    <style>
+        /* Estilos básicos para el formato simple de la plantilla */
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        form { max-width: 800px; margin: 0 auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; }
+        input[type="text"], input[type="date"], select { 
+            width: 100%; padding: 8px; margin: 5px 0 10px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; 
+        }
+        button { 
+            background-color: #4CAF50; color: white; padding: 10px 15px; margin: 8px 0; border: none; border-radius: 4px; cursor: pointer; width: 100%; 
+        }
+        button:hover { background-color: #45a049; }
+        
+        /* Estilos para las preguntas (manteniendo el formato de tabla/columna simple) */
+        .question-row { display: flex; align-items: center; margin-bottom: 5px; }
+        .question-row label.q-number { width: 5%; font-weight: bold; }
+        .question-row label.q-text { width: 45%; }
+        .question-row select { width: 12%; margin: 0 5px; padding: 5px; }
+        .question-row input[type="text"] { width: 26%; margin: 0 5px; padding: 5px; }
 
-        table { border-collapse: collapse; width: 100%; table-layout: fixed; }
-        
-        /* CELDAS Y BORDES */
-        th, td { 
-            border: 1px solid #a0a0a0; 
-            padding: 4px; 
-            height: 32px;
-            font-size: 11px; 
-            vertical-align: middle; 
-        }
+        /* Estilos para el personal, alineando los 4 inputs de cada persona */
+        .personal-row { display: flex; margin-bottom: 5px; }
+        .personal-row label { width: 15%; font-weight: bold; align-self: center; }
+        .personal-row input { width: 21%; margin-right: 1%; } 
 
-        /* ANCHOS DE COLUMNA (SIMULANDO EXCEL) */
-        .col-N { width: 30px; text-align: center; } 
-        .col-Pregunta { width: 40%; } 
-        .col-Select { width: 105px; text-align: center; } 
-        .col-Paraliza { width: 80px; }
-        .col-Coment { width: auto; }
-        
-        /* ESTILO para los SELECTS */
-        .select-input {
-            width: 100%;
-            height: 100%;
-            border: none;
-            padding: 4px;
-            font-size: 12px;
-            background-color: transparent;
-            cursor: pointer;
-            text-align-last: center;
-            font-weight: 500;
-        }
-        .select-input:focus {
-            background-color: #e8f0fe;
-            outline: none;
-        }
-        /* Color dinámico para las opciones */
-        option[value="SI"] { color: red; font-weight: bold; }
-        option[value="NO"] { color: green; }
-        option[value="NA"] { color: gray; }
-
-        /* HEADER COLORES */
-        .header-blue { background-color: #4472c4; color: white; font-weight: bold; padding: 5px; }
-        .header-dark { background-color: #203764; color: white; font-weight: bold; text-align: center; }
-        .sub-header { background-color: #dae3f3; font-weight: bold; color: #203764; }
-
-        /* INPUTS DE TEXTO */
-        input[type="text"], input[type="date"], input[type="number"] {
-            width: 100%; height: 100%; border: none; padding: 2px 5px; 
-            font-family: inherit; font-size: 11px; background-color: transparent;
-        }
-        input:focus { background-color: #fffacd; outline: 1px solid #f1c40f; }
-        
-        .cell-center { text-align: center; }
-        
-        /* RESULTADOS CALCULADOS (Disabled/Readonly) */
-        .read-only-result {
-            background-color: #dcdcdc; /* Color gris para simular deshabilitado */
-            border: 1px solid #999;
-            display: block;
-            width: 100%;
-            height: 100%;
-            padding: 4px;
-            box-sizing: border-box;
-            font-size: 12px;
-            text-align: center;
-            font-weight: bold;
-            color: #444;
-        }
-        
-        /* LOGO */
-        .entel-logo { font-size: 24px; font-weight: 800; color: #005cbb; font-style: italic; }
-        .entel-e { color: #ff6600; }
-
-        /* SUBIDA DE FOTO */
-        .photo-section {
-            margin-top: 20px; border: 2px dashed #4472c4; background: #f8faff; padding: 20px; text-align: center;
-        }
-
-        /* BOTONES */
-        .btn-submit {
-            background-color: #4472c4; color: white; border: none; padding: 12px 40px; 
-            font-size: 16px; font-weight: bold; border-radius: 4px; cursor: pointer; margin-top: 15px;
-            transition: background 0.3s;
-        }
-        .btn-submit:hover { background-color: #365a9e; }
-        .btn-submit:disabled { background-color: #ccc; cursor: not-allowed; }
-
-        #status-msg { margin-top: 10px; font-weight: bold; }
-        .text-success { color: #27ae60; }
-        .text-error { color: #c0392b; }
-    </style>
+    </style>
 </head>
 <body>
 
-<form id="reporte-form" class="excel-container">
-    <table>
-        <tr>
-            <td colspan="3" class="cell-center"><div class="entel-logo"><span class="entel-e">e</span>) entel</div></td>
-            <td colspan="4" class="header-blue">TIPO DE DOCUMENTO: FORMATO</td>
-            <td colspan="3" class="header-blue">VERSIÓN: 1</td>
-            <td colspan="3" class="header-blue">CÓDIGO: IM.F-007</td>
-        </tr>
+<form id="reporte-form">
+    <h1>Reporte de Inspección Estructural</h1>
+    
+    <hr>
+    
+    <h2>I. DATOS DEL COOPERADOR</h2>
+    
+    <label for="razon_social">Razón Social (E11):</label>
+    <input type="text" id="razon_social" name="razon_social"><br>
+    
+    <label for="ruc">RUC (T11):</label>
+    <input type="text" id="ruc" name="ruc"><br>
 
-        <tr><td colspan="13" class="header-blue">I. DATOS DEL COOPERADOR</td></tr>
-        <tr>
-                        <td colspan="4"><input type="text" name="personal_01_nombre" placeholder="Nombre Cooperador"></td>
-                        <td colspan="2"><input type="text" name="personal_01_cargo" placeholder="Cargo"></td>
-                        <td colspan="3"><input type="text" name="personal_01_empresa" placeholder="Empresa"></td>
-            <td colspan="2"></td>
-                        <td colspan="2"><input type="text" name="personal_01_dni" placeholder="DNI"></td>
-        </tr>
+    <h3>Personal de Inspección</h3>
+    
+    <div class="personal-row">
+        <label>Personal 01:</label>
+        <input type="text" name="personal_01_nombre" placeholder="Nombre (D12)">
+        <input type="text" name="personal_01_cargo" placeholder="Cargo (H12)">
+        <input type="text" name="personal_01_empresa" placeholder="Empresa (O12)">
+        <input type="text" name="personal_01_dni" placeholder="DNI (T12)">
+    </div>
 
-        <tr><td colspan="13" class="header-blue">II. DATOS DEL PROYECTO Y SITE</td></tr>
-        <tr>
-            <td colspan="3" class="header-blue">Nombre Site:</td>
-                        <td colspan="3"><input type="text" name="nombre_site" required placeholder="Ej: LIMA CENTRO"></td>
-            <td colspan="4" class="header-blue">Prioridad:</td>
-            <td colspan="3"><input type="text" name="prioridad"></td>
-        </tr>
-        <tr>
-            <td colspan="3" class="header-blue">Dirección:</td>
-            <td colspan="10"><input type="text" name="direccion"></td>
-        </tr>
-        <tr>
-            <td colspan="3" class="header-blue">Distrito/Prov/Dpto:</td>
-                        <td colspan="3"><input type="text" name="distrito" placeholder="Lima"></td>
-            <td colspan="4" class="header-blue">Tipo de Sitio:</td>
-                        <td colspan="3"><input type="text" name="tipo_sitio" placeholder="Torre / Monopolo / Rooftop"></td>
-        </tr>
+    <div class="personal-row">
+        <label>Personal 02:</label>
+        <input type="text" name="personal_01_nombre_2" placeholder="Nombre (D13)">
+        <input type="text" name="personal_01_cargo_2" placeholder="Cargo (H13)">
+        <input type="text" name="personal_01_empresa_2" placeholder="Empresa (O13)">
+        <input type="text" name="personal_01_dni_2" placeholder="DNI (T13)">
+    </div>
 
-        <tr><td colspan="13" class="header-blue">III. DATOS DEL INSPECTOR</td></tr>
-        <tr>
-            <td colspan="4"><input type="text" name="inspector_nombre" placeholder="Nombre Inspector"></td>
-            <td colspan="2"><input type="text" name="inspector_cargo" placeholder="Cargo"></td>
-            <td colspan="3"><input type="text" name="inspector_empresa" placeholder="Empresa"></td>
-            <td colspan="4"><input type="text" name="inspector_dni" placeholder="DNI"></td>
-        </tr>
-        <tr>
-            <td colspan="4" class="header-blue">Fecha de Inspección:</td>
-                        <td colspan="2"><input type="date" name="fecha_inicio" required></td>
-            <td colspan="3" class="header-blue">Fecha fin supervisión (No se usa, solo visual)</td>
-            <td colspan="4"><input type="date" name="fecha_fin"></td>
-        </tr>
+    <div class="personal-row">
+        <label>Personal 03:</label>
+        <input type="text" name="personal_01_nombre_3" placeholder="Nombre (D14)">
+        <input type="text" name="personal_01_cargo_3" placeholder="Cargo (H14)">
+        <input type="text" name="personal_01_empresa_3" placeholder="Empresa (O14)">
+        <input type="text" name="personal_01_dni_3" placeholder="DNI (T14)">
+    </div>
 
-        <tr><td colspan="13" class="header-blue">IV. PREGUNTAS DE VERIFICACIÓN DE ESTRUCTURA</td></tr>
-        <tr>
-            <td class="col-N header-dark">N°</td>
-            <td class="col-Pregunta header-dark" colspan="2">Preguntas</td>
-            <td class="col-Select header-dark" colspan="3">Respuesta (SI/NO/NA)</td> <td class="col-Paraliza header-dark" colspan="2">Aplica Paralización</td>
-            <td class="col-Coment header-dark" colspan="5">Comentarios</td>
-        </tr>
+    <div class="personal-row">
+        <label>Personal 04:</label>
+        <input type="text" name="personal_01_nombre_4" placeholder="Nombre (D15)">
+        <input type="text" name="personal_01_cargo_4" placeholder="Cargo (H15)">
+        <input type="text" name="personal_01_empresa_4" placeholder="Empresa (O15)">
+        <input type="text" name="personal_01_dni_4" placeholder="DNI (T15)">
+    </div>
 
-        <tr class="sub-header"><td colspan="13">CIMENTACIÓN - CONDICIONES DEL CONCRETO</td></tr>
-        <tr>
-            <td class="col-N cell-center">1</td>
-            <td colspan="2">Presenta fisuras en el concreto</td>
-            <td colspan="3" class="cell-center">
-                <select name="p_concreto_1" class="select-input" required>
-                    <option value="NA">NA</option>
-                    <option value="SI">SI</option>
-                    <option value="NO" selected>NO</option>
-                </select>
-            </td>
-            <td colspan="2" class="cell-center">
-                                <select name="p_concreto_1_paralizacion" class="select-input">
-                    <option value="NO" selected>NO</option>
-                    <option value="SI">SI</option>
-                </select>
-            </td>
-            <td colspan="5"><input type="text" name="p_concreto_1_comentario"></td>
-        </tr>
-        <tr>
-            <td class="col-N cell-center">2</td>
-            <td colspan="2">Presenta desprendimientos</td>
-            <td colspan="3" class="cell-center">
-                <select name="p_concreto_2" class="select-input" required>
-                    <option value="NA">NA</option>
-                    <option value="SI">SI</option>
-                    <option value="NO" selected>NO</option>
-                </select>
-            </td>
-            <td colspan="2" class="cell-center">
-                                <select name="p_concreto_2_paralizacion" class="select-input">
-                    <option value="NO" selected>NO</option>
-                    <option value="SI">SI</option>
-                </select>
-            </td>
-            <td colspan="5"><input type="text" name="p_concreto_2_comentario"></td>
-        </tr>
-        <tr>
-            <td class="col-N cell-center">3</td>
-            <td colspan="2">Presenta humedad</td>
-            <td colspan="3" class="cell-center">
-                <select name="p_concreto_3" class="select-input" required>
-                    <option value="NA">NA</option>
-                    <option value="SI">SI</option>
-                    <option value="NO" selected>NO</option>
-                </select>
-            </td>
-            <td colspan="2" class="cell-center">
-                                <select name="p_concreto_3_paralizacion" class="select-input">
-                    <option value="NO" selected>NO</option>
-                    <option value="SI">SI</option>
-                </select>
-            </td>
-            <td colspan="5"><input type="text" name="p_concreto_3_comentario"></td>
-        </tr>
+    <div class="personal-row">
+        <label>Personal 05:</label>
+        <input type="text" name="personal_01_nombre_5" placeholder="Nombre (D16)">
+        <input type="text" name="personal_01_cargo_5" placeholder="Cargo (H16)">
+        <input type="text" name="personal_01_empresa_5" placeholder="Empresa (O16)">
+        <input type="text" name="personal_01_dni_5" placeholder="DNI (T16)">
+    </div>
+    
+    <hr>
 
-        <tr class="sub-header"><td colspan="13">CIMENTACIÓN - ESTADO DE ANCLAJES</td></tr>
-        <tr>
-            <td class="col-N cell-center">4</td>
-            <td colspan="2">Presenta grouting</td>
-            <td colspan="3" class="cell-center">
-                <select name="p_anclaje_1" class="select-input" required>
-                    <option value="NA">NA</option>
-                    <option value="SI">SI</option>
-                    <option value="NO" selected>NO</option>
-                </select>
-            </td>
-            <td colspan="2" class="cell-center">
-                                <select name="p_anclaje_1_paralizacion" class="select-input">
-                    <option value="NO" selected>NO</option>
-                    <option value="SI">SI</option>
-                </select>
-            </td>
-            <td colspan="5"><input type="text" name="p_anclaje_1_comentario"></td>
-        </tr>
-        <tr>
-            <td class="col-N cell-center">5</td>
-            <td colspan="2">Presenta codo (óxido)</td>
-            <td colspan="3" class="cell-center">
-                <select name="p_anclaje_2" class="select-input" required>
-                    <option value="NA">NA</option>
-                    <option value="SI">SI</option>
-                    <option value="NO" selected>NO</option>
-                </select>
-            </td>
-            <td colspan="2" class="cell-center">
-                                <select name="p_anclaje_2_paralizacion" class="select-input">
-                    <option value="NO" selected>NO</option>
-                    <option value="SI">SI</option>
-                </select>
-            </td>
-            <td colspan="5"><input type="text" name="p_anclaje_2_comentario"></td>
-        </tr>
-        <tr>
-            <td class="col-N cell-center">6</td>
-            <td colspan="2">Presenta tuerca y contra tuerca</td>
-            <td colspan="3" class="cell-center">
-                <select name="p_anclaje_3" class="select-input" required>
-                    <option value="NA">NA</option>
-                    <option value="SI">SI</option>
-                    <option value="NO" selected>NO</option>
-                </select>
-            </td>
-            <td colspan="2" class="cell-center">
-                                <select name="p_anclaje_3_paralizacion" class="select-input">
-                    <option value="NO" selected>NO</option>
-                    <option value="SI">SI</option>
-                </select>
-            </td>
-            <td colspan="5"><input type="text" name="p_anclaje_3_comentario"></td>
-        </tr>
+    <h2>II. DATOS DEL PROYECTO Y SITE</h2>
+    <label for="nombre_site">Nombre Site (E20):</label>
+    <input type="text" id="nombre_site" name="nombre_site" required><br>
+    
+    <label for="prioridad">Prioridad (E21):</label>
+    <input type="text" id="prioridad" name="prioridad"><br>
+    
+    <label for="direccion">Dirección (E22):</label>
+    <input type="text" id="direccion" name="direccion"><br>
+    
+    <label for="distrito">Distrito/Prov/Dpto (E24):</label>
+    <input type="text" id="distrito" name="distrito"><br>
+    
+    <label for="tipo_sitio">Tipo de Sitio (L24):</label>
+    <input type="text" id="tipo_sitio" name="tipo_sitio"><br>
 
-        <tr class="sub-header"><td colspan="13">CIMENTACIÓN - ESTADO DE PLANCHA BASE</td></tr>
-        <tr>
-            <td class="col-N cell-center">7</td>
-            <td colspan="2">Presenta deformación</td>
-            <td colspan="3" class="cell-center">
-                <select name="p_base_1" class="select-input" required>
-                    <option value="NA">NA</option>
-                    <option value="SI">SI</option>
-                    <option value="NO" selected>NO</option>
-                </select>
-            </td>
-            <td colspan="2" class="cell-center">
-                                <select name="p_base_1_paralizacion" class="select-input">
-                    <option value="NO" selected>NO</option>
-                    <option value="SI">SI</option>
-                </select>
-            </td>
-            <td colspan="5"><input type="text" name="p_base_1_comentario"></td>
-        </tr>
-        <tr>
-            <td class="col-N cell-center">8</td>
-            <td colspan="2">Presenta codo</td>
-            <td colspan="3" class="cell-center">
-                <select name="p_base_2" class="select-input" required>
-                    <option value="NA">NA</option>
-                    <option value="SI">SI</option>
-                    <option value="NO" selected>NO</option>
-                </select>
-            </td>
-            <td colspan="2" class="cell-center">
-                                <select name="p_base_2_paralizacion" class="select-input">
-                    <option value="NO" selected>NO</option>
-                    <option value="SI">SI</option>
-                </select>
-            </td>
-            <td colspan="5"><input type="text" name="p_base_2_comentario"></td>
-        </tr>
-        <tr>
-            <td class="col-N cell-center">9</td>
-            <td colspan="2">Presenta fisuras en la plancha</td>
-            <td colspan="3" class="cell-center">
-                <select name="p_base_3" class="select-input" required>
-                    <option value="NA">NA</option>
-                    <option value="SI">SI</option>
-                    <option value="NO" selected>NO</option>
-                </select>
-            </td>
-            <td colspan="2" class="cell-center">
-                                <select name="p_base_3_paralizacion" class="select-input">
-                    <option value="NO" selected>NO</option>
-                    <option value="SI">SI</option>
-                </select>
-            </td>
-            <td colspan="5"><input type="text" name="p_base_3_comentario"></td>
-        </tr>
+    <hr>
 
-        <tr class="sub-header"><td colspan="13">ESTRUCTURA METALICA - CONEXIONES</td></tr>
-        <tr>
-            <td class="col-N cell-center">11</td>
-            <td colspan="2">Presenta pernos faltantes (>30%)</td>
-            <td colspan="3" class="cell-center">
-                <select name="p_conexion_1" class="select-input" required>
-                    <option value="NA">NA</option>
-                    <option value="SI">SI</option>
-                    <option value="NO" selected>NO</option>
-                </select>
-            </td>
-            <td colspan="2" class="cell-center">
-                                <select name="p_conexion_1_paralizacion" class="select-input">
-                    <option value="NO" selected>NO</option>
-                    <option value="SI">SI</option>
-                </select>
-            </td>
-            <td colspan="5"><input type="text" name="p_conexion_1_comentario"></td>
-        </tr>
-        <tr>
-            <td class="col-N cell-center">12</td>
-            <td colspan="2">Presenta óxido en los pernos</td>
-            <td colspan="3" class="cell-center">
-                <select name="p_conexion_2" class="select-input" required>
-                    <option value="NA">NA</option>
-                    <option value="SI">SI</option>
-                    <option value="NO" selected>NO</option>
-                </select>
-            </td>
-            <td colspan="2" class="cell-center">
-                                <select name="p_conexion_2_paralizacion" class="select-input">
-                    <option value="NO" selected>NO</option>
-                    <option value="SI">SI</option>
-                </select>
-            </td>
-            <td colspan="5"><input type="text" name="p_conexion_2_comentario"></td>
-        </tr>
-        <tr>
-            <td class="col-N cell-center">13</td>
-            <td colspan="2">Presenta tuerca y contratuerca</td>
-            <td colspan="3" class="cell-center">
-                <select name="p_conexion_3" class="select-input" required>
-                    <option value="NA">NA</option>
-                    <option value="SI">SI</option>
-                    <option value="NO" selected>NO</option>
-                </select>
-            </td>
-            <td colspan="2" class="cell-center">
-                                <select name="p_conexion_3_paralizacion" class="select-input">
-                    <option value="NO" selected>NO</option>
-                    <option value="SI">SI</option>
-                </select>
-            </td>
-            <td colspan="5"><input type="text" name="p_conexion_3_comentario"></td>
-        </tr>
-        <tr>
-            <td class="col-N cell-center">14</td>
-            <td colspan="2">Presenta óxido en planchas (codo)</td>
-            <td colspan="3" class="cell-center">
-                <select name="p_estructura_1" class="select-input" required>
-                    <option value="NA">NA</option>
-                    <option value="SI">SI</option>
-                    <option value="NO" selected>NO</option>
-                </select>
-            </td>
-            <td colspan="2" class="cell-center">
-                                <select name="p_estructura_1_paralizacion" class="select-input">
-                    <option value="NO" selected>NO</option>
-                    <option value="SI">SI</option>
-                </select>
-            </td>
-            <td colspan="5"><input type="text" name="p_estructura_1_comentario"></td>
-        </tr>
-        <tr>
-            <td class="col-N cell-center">15</td>
-            <td colspan="2">Presenta fisuras en la plancha</td>
-            <td colspan="3" class="cell-center">
-                <select name="p_estructura_2" class="select-input" required>
-                    <option value="NA">NA</option>
-                    <option value="SI">SI</option>
-                    <option value="NO" selected>NO</option>
-                </select>
-            </td>
-            <td colspan="2" class="cell-center">
-                                <select name="p_estructura_2_paralizacion" class="select-input">
-                    <option value="NO" selected>NO</option>
-                    <option value="SI">SI</option>
-                </select>
-            </td>
-            <td colspan="5"><input type="text" name="p_estructura_2_comentario"></td>
-        </tr>
-        <tr>
-            <td class="col-N cell-center">16</td>
-            <td colspan="2">Presenta fisuras en la soldadura</td>
-            <td colspan="3" class="cell-center">
-                <select name="p_estructura_3" class="select-input" required>
-                    <option value="NA">NA</option>
-                    <option value="SI">SI</option>
-                    <option value="NO" selected>NO</option>
-                </select>
-            </td>
-            <td colspan="2" class="cell-center">
-                                <select name="p_estructura_3_paralizacion" class="select-input">
-                    <option value="NO" selected>NO</option>
-                    <option value="SI">SI</option>
-                </select>
-            </td>
-            <td colspan="5"><input type="text" name="p_estructura_3_comentario"></td>
-        </tr>
+    <h2>III. DATOS DEL INSPECTOR</h2>
+    <input type="text" name="inspector_nombre" placeholder="Nombre Inspector (D28)"><br>
+    <input type="text" name="inspector_cargo" placeholder="Cargo (I28)"><br>
+    <input type="text" name="inspector_empresa" placeholder="Empresa (O28)"><br>
+    <input type="text" name="inspector_dni" placeholder="DNI (T28)"><br>
 
-        <tr class="sub-header"><td colspan="13">OXIDACIÓN Y CORROSIÓN DE ELEMENTOS</td></tr>
-        <tr>
-            <td class="col-N cell-center">17</td>
-            <td colspan="2">Presenta óxido en montantes</td>
-            <td colspan="3" class="cell-center">
-                <select name="p_corrosion_1" class="select-input" required>
-                    <option value="NA">NA</option>
-                    <option value="SI">SI</option>
-                    <option value="NO" selected>NO</option>
-                </select>
-            </td>
-            <td colspan="2" class="cell-center">
-                                <select name="p_corrosion_1_paralizacion" class="select-input">
-                    <option value="NO" selected>NO</option>
-                    <option value="SI">SI</option>
-                </select>
-            </td>
-            <td colspan="5"><input type="text" name="p_corrosion_1_comentario"></td>
-        </tr>
-        <tr>
-            <td class="col-N cell-center">26</td>
-            <td colspan="2">Presenta corrosión en horizontales</td>
-            <td colspan="3" class="cell-center">
-                <select name="p_corrosion_10" class="select-input" required>
-                    <option value="NA">NA</option>
-                    <option value="SI">SI</option>
-                    <option value="NO" selected>NO</option>
-                </select>
-            </td>
-            <td colspan="2" class="cell-center">
-                                <select name="p_corrosion_10_paralizacion" class="select-input">
-                    <option value="NO" selected>NO</option>
-                    <option value="SI">SI</option>
-                </select>
-            </td>
-            <td colspan="5"><input type="text" name="p_corrosion_10_comentario"></td>
-        </tr>
-        <tr>
-            <td class="col-N cell-center">33</td>
-            <td colspan="2">Presenta pérdida de pintura</td>
-            <td colspan="3" class="cell-center">
-                <select name="p_corrosion_17" class="select-input" required>
-                    <option value="NA">NA</option>
-                    <option value="SI">SI</option>
-                    <option value="NO" selected>NO</option>
-                </select>
-            </td>
-            <td colspan="2" class="cell-center">
-                                <select name="p_corrosion_17_paralizacion" class="select-input">
-                    <option value="NO" selected>NO</option>
-                    <option value="SI">SI</option>
-                </select>
-            </td>
-            <td colspan="5"><input type="text" name="p_corrosion_17_comentario"></td>
-        </tr>
-        <tr>
-            <td class="col-N cell-center">34</td>
-            <td colspan="2">Presenta pérdida de galvanizado</td>
-            <td colspan="3" class="cell-center">
-                <select name="p_corrosion_18" class="select-input" required>
-                    <option value="NA">NA</option>
-                    <option value="SI">SI</option>
-                    <option value="NO" selected>NO</option>
-                </select>
-            </td>
-            <td colspan="2" class="cell-center">
-                                <select name="p_corrosion_18_paralizacion" class="select-input">
-                    <option value="NO" selected>NO</option>
-                    <option value="SI">SI</option>
-                </select>
-            </td>
-            <td colspan="5"><input type="text" name="p_corrosion_18_comentario"></td>
-        </tr>
+    <label for="fecha_inicio">Fecha de Inspección (F30):</label>
+    <input type="date" id="fecha_inicio" name="fecha_inicio" required><br>
+    
+    <label for="fecha_fin">Fecha fin supervisión (R30):</label>
+    <input type="date" id="fecha_fin" name="fecha_fin"><br>
 
-        <tr class="sub-header"><td colspan="13">ALINEAMIENTO Y ESTABILIDAD</td></tr>
-        <tr>
-            <td class="col-N cell-center">35</td>
-            <td colspan="2">Presenta deformación visible (>2%)</td>
-            <td colspan="3" class="cell-center">
-                <select name="p_alineamiento_1" class="select-input" required>
-                    <option value="NA">NA</option>
-                    <option value="SI">SI</option>
-                    <option value="NO" selected>NO</option>
-                </select>
-            </td>
-            <td colspan="2" class="cell-center">
-                                <select name="p_alineamiento_1_paralizacion" class="select-input">
-                    <option value="NO" selected>NO</option>
-                    <option value="SI">SI</option>
-                </select>
-            </td>
-            <td colspan="5"><input type="text" name="p_alineamiento_1_comentario"></td>
-        </tr>
-        <tr>
-            <td class="col-N cell-center">36</td>
-            <td colspan="2">Presenta movimiento perceptible</td>
-            <td colspan="3" class="cell-center">
-                <select name="p_alineamiento_2" class="select-input" required>
-                    <option value="NA">NA</option>
-                    <option value="SI">SI</option>
-                    <option value="NO" selected>NO</option>
-                </select>
-            </td>
-            <td colspan="2" class="cell-center">
-                                <select name="p_alineamiento_2_paralizacion" class="select-input">
-                    <option value="NO" selected>NO</option>
-                    <option value="SI">SI</option>
-                </select>
-            </td>
-            <td colspan="5"><input type="text" name="p_alineamiento_2_comentario"></td>
-        </tr>
+    <hr>
+    
+    <h2>IV. PREGUNTAS DE VERIFICACIÓN DE ESTRUCTURA</h2>
+    <p>Respuesta (SI/NO/NA) | Aplica Paralización (SI/NO) | Comentarios</p>
 
-        <tr class="sub-header"><td colspan="13">ADICIONALES</td></tr>
-        <tr>
-            <td class="col-N cell-center">40</td>
-            <td colspan="2">Presenta empozamiento de agua</td>
-            <td colspan="3" class="cell-center">
-                <select name="p_adicional_1" class="select-input" required>
-                    <option value="NA">NA</option>
-                    <option value="SI">SI</option>
-                    <option value="NO" selected>NO</option>
-                </select>
-            </td>
-            <td colspan="2" class="cell-center">
-                                <select name="p_adicional_1_paralizacion" class="select-input">
-                    <option value="NO" selected>NO</option>
-                    <option value="SI">SI</option>
-                </select>
-            </td>
-            <td colspan="5"><input type="text" name="p_adicional_1_comentario"></td>
-        </tr>
-        <tr>
-            <td class="col-N cell-center">44</td>
-            <td colspan="2">Presenta crecimiento de vegetación</td>
-            <td colspan="3" class="cell-center">
-                <select name="p_adicional_5" class="select-input" required>
-                    <option value="NA">NA</option>
-                    <option value="SI">SI</option>
-                    <option value="NO" selected>NO</option>
-                </select>
-            </td>
-            <td colspan="2" class="cell-center">
-                                <select name="p_adicional_5_paralizacion" class="select-input">
-                    <option value="NO" selected>NO</option>
-                    <option value="SI">SI</option>
-                </select>
-            </td>
-            <td colspan="5"><input type="text" name="p_adicional_5_comentario"></td>
-        </tr>
+    <h3>CIMENTACIÓN - CONDICIONES DEL CONCRETO</h3>
+    
+    <div class="question-row">
+        <label class="q-number">1.</label>
+        <label class="q-text">Presenta fisuras en el concreto (G34/H34/I34):</label>
+        <select name="p_concreto_1" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
+        <select name="p_concreto_1_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <input type="text" name="p_concreto_1_comentario" placeholder="Comentario (K34)">
+    </div>
 
-        <tr><td colspan="13" class="header-blue">V. RESULTADO DE LA INSPECCIÓN</td></tr>
-        <tr>
-            <td colspan="4" class="header-blue">Cantidad de SI/NO</td>
-            <td colspan="9"><span class="read-only-result">CALCULADO AUTOMÁTICAMENTE</span></td>
-        </tr>
-        <tr>
-            <td colspan="4" class="header-blue">Cantidad Preguntas Aplicables</td>
-            <td colspan="9"><span class="read-only-result">CALCULADO AUTOMÁTICAMENTE</span></td>
-        </tr>
-        <tr>
-            <td colspan="4" class="header-blue">Calificación Lograda %</td>
-            <td colspan="9"><span class="read-only-result">CALCULADO AUTOMÁTICAMENTE</span></td>
-        </tr>
+    <div class="question-row">
+        <label class="q-number">2.</label>
+        <label class="q-text">Presenta desprendimientos (G35/H35/I35):</label>
+        <select name="p_concreto_2" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
+        <select name="p_concreto_2_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <input type="text" name="p_concreto_2_comentario" placeholder="Comentario (K35)">
+    </div>
+    
+    <div class="question-row">
+        <label class="q-number">3.</label>
+        <label class="q-text">Presenta humedad (G36/H36/I36):</label>
+        <select name="p_concreto_3" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
+        <select name="p_concreto_3_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <input type="text" name="p_concreto_3_comentario" placeholder="Comentario (K36)">
+    </div>
 
-        <tr>
-            <td colspan="13">
-                <div class="photo-section">
-                    <h3>📸 Adjuntar Reporte Fotográfico (Hoja 4)</h3>
-                    <input type="file" name="foto" accept="image/*" required>
-                    <br><br>
-                    <input type="text" name="descripcionFoto" placeholder="Descripción breve de la foto (Opcional)" style="border:1px solid #ccc; padding:5px; width:50%;">
-                </div>
-                <div style="text-align: center;">
-                    <button type="submit" id="btnSubmit" class="btn-submit">Generar Reporte Excel</button>
-                    <div id="status-msg"></div>
-                </div>
-            </td>
-        </tr>
+    <h3>CIMENTACIÓN - ESTADO DE ANCLAJES</h3>
+    
+    <div class="question-row">
+        <label class="q-number">4.</label>
+        <label class="q-text">Presenta grouting (G38/H38/I38):</label>
+        <select name="p_anclaje_1" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
+        <select name="p_anclaje_1_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <input type="text" name="p_anclaje_1_comentario" placeholder="Comentario (K38)">
+    </div>
 
-    </table>
+    <div class="question-row">
+        <label class="q-number">5.</label>
+        <label class="q-text">Presenta codo (doblado) (G39/H39/I39):</label>
+        <select name="p_anclaje_2" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
+        <select name="p_anclaje_2_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <input type="text" name="p_anclaje_2_comentario" placeholder="Comentario (K39)">
+    </div>
+
+    <div class="question-row">
+        <label class="q-number">6.</label>
+        <label class="q-text">Presenta tuerca y contra tuerca (G40/H40/I40):</label>
+        <select name="p_anclaje_3" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
+        <select name="p_anclaje_3_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <input type="text" name="p_anclaje_3_comentario" placeholder="Comentario (K40)">
+    </div>
+
+    <h3>CIMENTACIÓN - ESTADO DE PLANCHA BASE</h3>
+
+    <div class="question-row">
+        <label class="q-number">7.</label>
+        <label class="q-text">Presenta deformación (G42/H42/I42):</label>
+        <select name="p_base_1" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
+        <select name="p_base_1_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <input type="text" name="p_base_1_comentario" placeholder="Comentario (K42)">
+    </div>
+    
+    <div class="question-row">
+        <label class="q-number">8.</label>
+        <label class="q-text">Presenta codo (doblado) (G43/H43/I43):</label>
+        <select name="p_base_2" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
+        <select name="p_base_2_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <input type="text" name="p_base_2_comentario" placeholder="Comentario (K43)">
+    </div>
+
+    <div class="question-row">
+        <label class="q-number">9.</label>
+        <label class="q-text">Presenta fisuras en la plancha (G44/H44/I44):</label>
+        <select name="p_base_3" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
+        <select name="p_base_3_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <input type="text" name="p_base_3_comentario" placeholder="Comentario (K44)">
+    </div>
+
+    <h3>ESTRUCTURA METÁLICA - CONEXIONES</h3>
+
+    <div class="question-row">
+        <label class="q-number">10.</label>
+        <label class="q-text">Presenta pernos faltantes (>30%) (G47/H47/I47):</label>
+        <select name="p_conexion_1" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
+        <select name="p_conexion_1_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <input type="text" name="p_conexion_1_comentario" placeholder="Comentario (K47)">
+    </div>
+    
+    <div class="question-row">
+        <label class="q-number">11.</label>
+        <label class="q-text">Presenta óxido en los pernos (G48/H48/I48):</label>
+        <select name="p_conexion_2" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
+        <select name="p_conexion_2_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <input type="text" name="p_conexion_2_comentario" placeholder="Comentario (K48)">
+    </div>
+
+    <div class="question-row">
+        <label class="q-number">12.</label>
+        <label class="q-text">Presenta tuerca y contra tuerca (G49/H49/I49):</label>
+        <select name="p_conexion_3" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
+        <select name="p_conexion_3_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <input type="text" name="p_conexion_3_comentario" placeholder="Comentario (K49)">
+    </div>
+    
+    <hr>
+    
+    <h2>V. RESULTADO DE LA INSPECCIÓN</h2>
+    <label>Cantidad de SI/NO (CALCULADO AUTOMÁTICAMENTE)</label>
+    <input type="text" disabled value="CALCULADO AUTOMÁTICAMENTE"><br>
+    <label>Cantidad Preguntas Aplicables (CALCULADO AUTOMÁTICAMENTE)</label>
+    <input type="text" disabled value="CALCULADO AUTOMÁTICAMENTE"><br>
+    <label>Calificación Lograda % (CALCULADO AUTOMÁTICAMENTE)</label>
+    <input type="text" disabled value="CALCULADO AUTOMÁTICAMENTE"><br>
+
+    <hr>
+
+    <h2>Reporte Fotográfico</h2>
+    <label for="foto">Adjuntar Foto (Obligatorio):</label>
+    <input type="file" id="foto" name="foto" accept="image/*" required><br>
+    <input type="text" name="descripcionFoto" placeholder="Descripción de la foto (B24)">
+
+    <button type="submit" id="btnSubmit">Generar Reporte Excel</button>
+    <div id="status-msg"></div>
 </form>
 
 <script>
-    document.getElementById('reporte-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const btn = document.getElementById('btnSubmit');
-        const statusDiv = document.getElementById('status-msg');
-        const formData = new FormData(e.target);
+    document.getElementById('reporte-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('btnSubmit');
+        const statusDiv = document.getElementById('status-msg');
+        const formData = new FormData(e.target);
 
-        // Validación Foto
-        if(!formData.get('foto').name) {
-            alert("⚠️ Debes subir una foto obligatoriamente.");
-            return;
-        }
+        if(!formData.get('foto').name) {
+            alert("⚠️ Debes subir una foto obligatoriamente.");
+            return;
+        }
 
-        btn.disabled = true;
-        btn.textContent = "⏳ Generando Excel...";
-        statusDiv.textContent = "Procesando datos en Render...";
-        statusDiv.className = "";
+        btn.disabled = true;
+        btn.textContent = "⏳ Generando Excel...";
+        statusDiv.textContent = "Procesando datos...";
+        statusDiv.className = "";
 
-        try {
-            // 🔴 ¡IMPORTANTE! REEMPLAZA ESTA URL con la URL de tu backend en Render 
-            const URL_BACKEND = "https://backend-reportes-excel.onrender.com/generar-reporte"; 
+        try {
+            // 🔴 ¡IMPORTANTE! REEMPLAZA ESTA URL con la URL de tu backend en Render 
+            const URL_BACKEND = "https://backend-reportes-excel.onrender.com/generar-reporte"; 
 
-            const response = await fetch(URL_BACKEND, {
-                method: 'POST',
-                body: formData
-            });
+            const response = await fetch(URL_BACKEND, {
+                method: 'POST',
+                body: formData
+            });
 
-            if (!response.ok) throw new Error(await response.text());
+            if (!response.ok) throw new Error(await response.text());
 
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            // Usamos 'nombre_site' para el nombre del archivo
-            a.download = `Reporte_${formData.get('nombre_site') || 'OOCC'}.xlsx`; 
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Reporte_${formData.get('nombre_site') || 'OOCC'}.xlsx`; 
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
 
-            statusDiv.textContent = "✅ ¡Reporte descargado correctamente!";
-            statusDiv.className = "text-success";
+            statusDiv.textContent = "✅ ¡Reporte descargado correctamente!";
+            statusDiv.className = "text-success";
 
-        } catch (error) {
-            console.error(error);
-            statusDiv.textContent = "❌ Error: " + error.message;
-            statusDiv.className = "text-error";
-        } finally {
-            btn.disabled = false;
-            btn.textContent = "Generar Reporte Excel";
-        }
-    });
+        } catch (error) {
+            console.error(error);
+            statusDiv.textContent = "❌ Error: " + error.message;
+            statusDiv.className = "text-error";
+        } finally {
+            btn.disabled = false;
+            btn.textContent = "Generar Reporte Excel";
+        }
+    });
 </script>
 
 </body>
