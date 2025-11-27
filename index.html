@@ -24,7 +24,7 @@
         th, td { 
             border: 1px solid #a0a0a0; 
             padding: 4px; 
-            height: 32px; /* Un poco más alto para facilitar el toque en móviles */
+            height: 32px;
             font-size: 11px; 
             vertical-align: middle; 
         }
@@ -36,7 +36,7 @@
         .col-Paraliza { width: 80px; }
         .col-Coment { width: auto; }
         
-        /* ESTILO PARA LOS SELECTS (Looks like Excel) */
+        /* ESTILO para los SELECTS */
         .select-input {
             width: 100%;
             height: 100%;
@@ -45,7 +45,7 @@
             font-size: 12px;
             background-color: transparent;
             cursor: pointer;
-            text-align-last: center; /* Centra el texto dentro del select */
+            text-align-last: center;
             font-weight: 500;
         }
         .select-input:focus {
@@ -70,6 +70,21 @@
         input:focus { background-color: #fffacd; outline: 1px solid #f1c40f; }
         
         .cell-center { text-align: center; }
+        
+        /* RESULTADOS CALCULADOS (Disabled/Readonly) */
+        .read-only-result {
+            background-color: #dcdcdc; /* Color gris para simular deshabilitado */
+            border: 1px solid #999;
+            display: block;
+            width: 100%;
+            height: 100%;
+            padding: 4px;
+            box-sizing: border-box;
+            font-size: 12px;
+            text-align: center;
+            font-weight: bold;
+            color: #444;
+        }
         
         /* LOGO */
         .entel-logo { font-size: 24px; font-weight: 800; color: #005cbb; font-style: italic; }
@@ -98,7 +113,6 @@
 
 <form id="reporte-form" class="excel-container">
     <table>
-        <!-- ENCABEZADO -->
         <tr>
             <td colspan="3" class="cell-center"><div class="entel-logo"><span class="entel-e">e</span>) entel</div></td>
             <td colspan="4" class="header-blue">TIPO DE DOCUMENTO: FORMATO</td>
@@ -106,69 +120,69 @@
             <td colspan="3" class="header-blue">CÓDIGO: IM.F-007</td>
         </tr>
 
-        <!-- I. DATOS COOPERADOR -->
         <tr><td colspan="13" class="header-blue">I. DATOS DEL COOPERADOR</td></tr>
         <tr>
-            <td colspan="4">PERSONAL 01</td>
+            <td colspan="4"><input type="text" name="cooperador_nombre" placeholder="Nombre Cooperador"></td>
             <td colspan="2"><input type="text" name="cooperador_cargo" placeholder="Cargo"></td>
             <td colspan="3"><input type="text" name="cooperador_empresa" placeholder="Empresa"></td>
             <td colspan="2"></td>
             <td colspan="2"><input type="text" name="cooperador_dni" placeholder="DNI"></td>
         </tr>
 
-        <!-- II. DATOS PROYECTO -->
         <tr><td colspan="13" class="header-blue">II. DATOS DEL PROYECTO Y SITE</td></tr>
         <tr>
-            <td colspan="3" class="header-blue">Nombre Site (D17):</td>
-            <td colspan="3"><input type="text" name="nombre_site" required placeholder="Ej: LIMA CENTRO"></td>
-            <td colspan="4" class="header-blue">Prioridad (D18):</td>
+            <td colspan="3" class="header-blue">Nombre Site:</td>
+            <td colspan="3"><input type="text" name="site_nombre" required placeholder="Ej: LIMA CENTRO"></td>
+            <td colspan="4" class="header-blue">Prioridad:</td>
             <td colspan="3"><input type="text" name="prioridad"></td>
         </tr>
         <tr>
-            <td colspan="3" class="header-blue">Dirección (D20):</td>
+            <td colspan="3" class="header-blue">Dirección:</td>
             <td colspan="10"><input type="text" name="direccion"></td>
         </tr>
+        <tr>
+            <td colspan="3" class="header-blue">Distrito/Prov/Dpto:</td>
+            <td colspan="3"><input type="text" name="site_distrito" placeholder="Lima"></td>
+            <td colspan="4" class="header-blue">Tipo de Sitio:</td>
+            <td colspan="3"><input type="text" name="site_tipo" placeholder="Torre / Monopolo / Rooftop"></td>
+        </tr>
 
-        <!-- III. INSPECTOR -->
         <tr><td colspan="13" class="header-blue">III. DATOS DEL INSPECTOR</td></tr>
         <tr>
-            <td colspan="4">PERSONAL 02</td>
-            <td colspan="2"><input type="text" name="inspector_02_cargo" placeholder="Cargo"></td>
-            <td colspan="3"><input type="text" name="inspector_02_empresa" placeholder="Empresa"></td>
-            <td colspan="4"><input type="text" name="inspector_02_dni" placeholder="DNI"></td>
+            <td colspan="4"><input type="text" name="inspector_nombre" placeholder="Nombre Inspector"></td>
+            <td colspan="2"><input type="text" name="inspector_cargo" placeholder="Cargo"></td>
+            <td colspan="3"><input type="text" name="inspector_empresa" placeholder="Empresa"></td>
+            <td colspan="4"><input type="text" name="inspector_dni" placeholder="DNI"></td>
         </tr>
         <tr>
-            <td colspan="4" class="header-blue">Fecha inicio supervisión</td>
-            <td colspan="2"><input type="date" name="fecha_inicio"></td>
-            <td colspan="3" class="header-blue">Fecha fin supervisión</td>
+            <td colspan="4" class="header-blue">Fecha de Inspección:</td>
+            <td colspan="2"><input type="date" name="fecha_inspeccion" required></td>
+            <td colspan="3" class="header-blue">Fecha fin supervisión (No se usa, solo visual)</td>
             <td colspan="4"><input type="date" name="fecha_fin"></td>
         </tr>
 
-        <!-- IV. CHECKLIST HEADER -->
         <tr><td colspan="13" class="header-blue">IV. PREGUNTAS DE VERIFICACIÓN DE ESTRUCTURA</td></tr>
         <tr>
             <td class="col-N header-dark">N°</td>
             <td class="col-Pregunta header-dark" colspan="2">Preguntas</td>
-            <td class="col-Select header-dark" colspan="3">Respuesta (SI/NO/NA)</td> <!-- colspan=3 fusiona C,D,E -->
-            <td class="col-Paraliza header-dark" colspan="2">Aplica Paralización</td>
+            <td class="col-Select header-dark" colspan="3">Respuesta (SI/NO/NA)</td> <td class="col-Paraliza header-dark" colspan="2">Aplica Paralización</td>
             <td class="col-Coment header-dark" colspan="5">Comentarios</td>
         </tr>
 
-        <!-- GRUPO: CIMENTACIÓN - CONCRETO -->
         <tr class="sub-header"><td colspan="13">CIMENTACIÓN - CONDICIONES DEL CONCRETO</td></tr>
         <tr>
             <td class="col-N cell-center">1</td>
             <td colspan="2">Presenta fisuras en el concreto</td>
             <td colspan="3" class="cell-center">
-                <select name="p_concreto_1" class="select-input">
+                <select name="p_concreto_1" class="select-input" required>
                     <option value="NA">NA</option>
                     <option value="SI">SI</option>
-                    <option value="NO">NO</option>
+                    <option value="NO" selected>NO</option>
                 </select>
             </td>
             <td colspan="2" class="cell-center">
                 <select name="p_concreto_1_paraliza" class="select-input">
-                    <option value="NO">NO</option>
+                    <option value="NO" selected>NO</option>
                     <option value="SI">SI</option>
                 </select>
             </td>
@@ -178,15 +192,15 @@
             <td class="col-N cell-center">2</td>
             <td colspan="2">Presenta desprendimientos</td>
             <td colspan="3" class="cell-center">
-                <select name="p_concreto_2" class="select-input">
+                <select name="p_concreto_2" class="select-input" required>
                     <option value="NA">NA</option>
                     <option value="SI">SI</option>
-                    <option value="NO">NO</option>
+                    <option value="NO" selected>NO</option>
                 </select>
             </td>
             <td colspan="2" class="cell-center">
                 <select name="p_concreto_2_paraliza" class="select-input">
-                    <option value="NO">NO</option>
+                    <option value="NO" selected>NO</option>
                     <option value="SI">SI</option>
                 </select>
             </td>
@@ -196,36 +210,35 @@
             <td class="col-N cell-center">3</td>
             <td colspan="2">Presenta humedad</td>
             <td colspan="3" class="cell-center">
-                <select name="p_concreto_3" class="select-input">
+                <select name="p_concreto_3" class="select-input" required>
                     <option value="NA">NA</option>
                     <option value="SI">SI</option>
-                    <option value="NO">NO</option>
+                    <option value="NO" selected>NO</option>
                 </select>
             </td>
             <td colspan="2" class="cell-center">
                 <select name="p_concreto_3_paraliza" class="select-input">
-                    <option value="NO">NO</option>
+                    <option value="NO" selected>NO</option>
                     <option value="SI">SI</option>
                 </select>
             </td>
             <td colspan="5"><input type="text" name="p_concreto_3_comentario"></td>
         </tr>
 
-        <!-- GRUPO: ANCLAJES -->
         <tr class="sub-header"><td colspan="13">CIMENTACIÓN - ESTADO DE ANCLAJES</td></tr>
         <tr>
             <td class="col-N cell-center">4</td>
             <td colspan="2">Presenta grouting</td>
             <td colspan="3" class="cell-center">
-                <select name="p_anclaje_1" class="select-input">
+                <select name="p_anclaje_1" class="select-input" required>
                     <option value="NA">NA</option>
                     <option value="SI">SI</option>
-                    <option value="NO">NO</option>
+                    <option value="NO" selected>NO</option>
                 </select>
             </td>
             <td colspan="2" class="cell-center">
                 <select name="p_anclaje_1_paraliza" class="select-input">
-                    <option value="NO">NO</option>
+                    <option value="NO" selected>NO</option>
                     <option value="SI">SI</option>
                 </select>
             </td>
@@ -235,15 +248,15 @@
             <td class="col-N cell-center">5</td>
             <td colspan="2">Presenta codo (óxido)</td>
             <td colspan="3" class="cell-center">
-                <select name="p_anclaje_2" class="select-input">
+                <select name="p_anclaje_2" class="select-input" required>
                     <option value="NA">NA</option>
                     <option value="SI">SI</option>
-                    <option value="NO">NO</option>
+                    <option value="NO" selected>NO</option>
                 </select>
             </td>
             <td colspan="2" class="cell-center">
                 <select name="p_anclaje_2_paraliza" class="select-input">
-                    <option value="NO">NO</option>
+                    <option value="NO" selected>NO</option>
                     <option value="SI">SI</option>
                 </select>
             </td>
@@ -253,36 +266,35 @@
             <td class="col-N cell-center">6</td>
             <td colspan="2">Presenta tuerca y contra tuerca</td>
             <td colspan="3" class="cell-center">
-                <select name="p_anclaje_3" class="select-input">
+                <select name="p_anclaje_3" class="select-input" required>
                     <option value="NA">NA</option>
                     <option value="SI">SI</option>
-                    <option value="NO">NO</option>
+                    <option value="NO" selected>NO</option>
                 </select>
             </td>
             <td colspan="2" class="cell-center">
                 <select name="p_anclaje_3_paraliza" class="select-input">
-                    <option value="NO">NO</option>
+                    <option value="NO" selected>NO</option>
                     <option value="SI">SI</option>
                 </select>
             </td>
             <td colspan="5"><input type="text" name="p_anclaje_3_comentario"></td>
         </tr>
 
-        <!-- GRUPO: PLANCHA BASE -->
         <tr class="sub-header"><td colspan="13">CIMENTACIÓN - ESTADO DE PLANCHA BASE</td></tr>
         <tr>
             <td class="col-N cell-center">7</td>
             <td colspan="2">Presenta deformación</td>
             <td colspan="3" class="cell-center">
-                <select name="p_base_1" class="select-input">
+                <select name="p_base_1" class="select-input" required>
                     <option value="NA">NA</option>
                     <option value="SI">SI</option>
-                    <option value="NO">NO</option>
+                    <option value="NO" selected>NO</option>
                 </select>
             </td>
             <td colspan="2" class="cell-center">
                 <select name="p_base_1_paraliza" class="select-input">
-                    <option value="NO">NO</option>
+                    <option value="NO" selected>NO</option>
                     <option value="SI">SI</option>
                 </select>
             </td>
@@ -292,15 +304,15 @@
             <td class="col-N cell-center">8</td>
             <td colspan="2">Presenta codo</td>
             <td colspan="3" class="cell-center">
-                <select name="p_base_2" class="select-input">
+                <select name="p_base_2" class="select-input" required>
                     <option value="NA">NA</option>
                     <option value="SI">SI</option>
-                    <option value="NO">NO</option>
+                    <option value="NO" selected>NO</option>
                 </select>
             </td>
             <td colspan="2" class="cell-center">
                 <select name="p_base_2_paraliza" class="select-input">
-                    <option value="NO">NO</option>
+                    <option value="NO" selected>NO</option>
                     <option value="SI">SI</option>
                 </select>
             </td>
@@ -310,36 +322,35 @@
             <td class="col-N cell-center">9</td>
             <td colspan="2">Presenta fisuras en la plancha</td>
             <td colspan="3" class="cell-center">
-                <select name="p_base_3" class="select-input">
+                <select name="p_base_3" class="select-input" required>
                     <option value="NA">NA</option>
                     <option value="SI">SI</option>
-                    <option value="NO">NO</option>
+                    <option value="NO" selected>NO</option>
                 </select>
             </td>
             <td colspan="2" class="cell-center">
                 <select name="p_base_3_paraliza" class="select-input">
-                    <option value="NO">NO</option>
+                    <option value="NO" selected>NO</option>
                     <option value="SI">SI</option>
                 </select>
             </td>
             <td colspan="5"><input type="text" name="p_base_3_comentario"></td>
         </tr>
 
-        <!-- GRUPO: CONEXIONES -->
         <tr class="sub-header"><td colspan="13">ESTRUCTURA METALICA - CONEXIONES</td></tr>
         <tr>
             <td class="col-N cell-center">11</td>
             <td colspan="2">Presenta pernos faltantes (>30%)</td>
             <td colspan="3" class="cell-center">
-                <select name="p_conexion_1" class="select-input">
+                <select name="p_conexion_1" class="select-input" required>
                     <option value="NA">NA</option>
                     <option value="SI">SI</option>
-                    <option value="NO">NO</option>
+                    <option value="NO" selected>NO</option>
                 </select>
             </td>
             <td colspan="2" class="cell-center">
                 <select name="p_conexion_1_paraliza" class="select-input">
-                    <option value="NO">NO</option>
+                    <option value="NO" selected>NO</option>
                     <option value="SI">SI</option>
                 </select>
             </td>
@@ -349,15 +360,15 @@
             <td class="col-N cell-center">12</td>
             <td colspan="2">Presenta óxido en los pernos</td>
             <td colspan="3" class="cell-center">
-                <select name="p_conexion_2" class="select-input">
+                <select name="p_conexion_2" class="select-input" required>
                     <option value="NA">NA</option>
                     <option value="SI">SI</option>
-                    <option value="NO">NO</option>
+                    <option value="NO" selected>NO</option>
                 </select>
             </td>
             <td colspan="2" class="cell-center">
                 <select name="p_conexion_2_paraliza" class="select-input">
-                    <option value="NO">NO</option>
+                    <option value="NO" selected>NO</option>
                     <option value="SI">SI</option>
                 </select>
             </td>
@@ -367,15 +378,15 @@
             <td class="col-N cell-center">13</td>
             <td colspan="2">Presenta tuerca y contratuerca</td>
             <td colspan="3" class="cell-center">
-                <select name="p_conexion_3" class="select-input">
+                <select name="p_conexion_3" class="select-input" required>
                     <option value="NA">NA</option>
                     <option value="SI">SI</option>
-                    <option value="NO">NO</option>
+                    <option value="NO" selected>NO</option>
                 </select>
             </td>
             <td colspan="2" class="cell-center">
                 <select name="p_conexion_3_paraliza" class="select-input">
-                    <option value="NO">NO</option>
+                    <option value="NO" selected>NO</option>
                     <option value="SI">SI</option>
                 </select>
             </td>
@@ -385,15 +396,15 @@
             <td class="col-N cell-center">14</td>
             <td colspan="2">Presenta óxido en planchas (codo)</td>
             <td colspan="3" class="cell-center">
-                <select name="p_estructura_1" class="select-input">
+                <select name="p_estructura_1" class="select-input" required>
                     <option value="NA">NA</option>
                     <option value="SI">SI</option>
-                    <option value="NO">NO</option>
+                    <option value="NO" selected>NO</option>
                 </select>
             </td>
             <td colspan="2" class="cell-center">
                 <select name="p_estructura_1_paraliza" class="select-input">
-                    <option value="NO">NO</option>
+                    <option value="NO" selected>NO</option>
                     <option value="SI">SI</option>
                 </select>
             </td>
@@ -403,15 +414,15 @@
             <td class="col-N cell-center">15</td>
             <td colspan="2">Presenta fisuras en la plancha</td>
             <td colspan="3" class="cell-center">
-                <select name="p_estructura_2" class="select-input">
+                <select name="p_estructura_2" class="select-input" required>
                     <option value="NA">NA</option>
                     <option value="SI">SI</option>
-                    <option value="NO">NO</option>
+                    <option value="NO" selected>NO</option>
                 </select>
             </td>
             <td colspan="2" class="cell-center">
                 <select name="p_estructura_2_paraliza" class="select-input">
-                    <option value="NO">NO</option>
+                    <option value="NO" selected>NO</option>
                     <option value="SI">SI</option>
                 </select>
             </td>
@@ -421,36 +432,35 @@
             <td class="col-N cell-center">16</td>
             <td colspan="2">Presenta fisuras en la soldadura</td>
             <td colspan="3" class="cell-center">
-                <select name="p_estructura_3" class="select-input">
+                <select name="p_estructura_3" class="select-input" required>
                     <option value="NA">NA</option>
                     <option value="SI">SI</option>
-                    <option value="NO">NO</option>
+                    <option value="NO" selected>NO</option>
                 </select>
             </td>
             <td colspan="2" class="cell-center">
                 <select name="p_estructura_3_paraliza" class="select-input">
-                    <option value="NO">NO</option>
+                    <option value="NO" selected>NO</option>
                     <option value="SI">SI</option>
                 </select>
             </td>
             <td colspan="5"><input type="text" name="p_estructura_3_comentario"></td>
         </tr>
 
-        <!-- GRUPO: OXIDACIÓN -->
         <tr class="sub-header"><td colspan="13">OXIDACIÓN Y CORROSIÓN DE ELEMENTOS</td></tr>
         <tr>
             <td class="col-N cell-center">17</td>
             <td colspan="2">Presenta óxido en montantes</td>
             <td colspan="3" class="cell-center">
-                <select name="p_corrosion_1" class="select-input">
+                <select name="p_corrosion_1" class="select-input" required>
                     <option value="NA">NA</option>
                     <option value="SI">SI</option>
-                    <option value="NO">NO</option>
+                    <option value="NO" selected>NO</option>
                 </select>
             </td>
             <td colspan="2" class="cell-center">
                 <select name="p_corrosion_1_paraliza" class="select-input">
-                    <option value="NO">NO</option>
+                    <option value="NO" selected>NO</option>
                     <option value="SI">SI</option>
                 </select>
             </td>
@@ -460,15 +470,15 @@
             <td class="col-N cell-center">26</td>
             <td colspan="2">Presenta corrosión en horizontales</td>
             <td colspan="3" class="cell-center">
-                <select name="p_corrosion_10" class="select-input">
+                <select name="p_corrosion_10" class="select-input" required>
                     <option value="NA">NA</option>
                     <option value="SI">SI</option>
-                    <option value="NO">NO</option>
+                    <option value="NO" selected>NO</option>
                 </select>
             </td>
             <td colspan="2" class="cell-center">
                 <select name="p_corrosion_10_paraliza" class="select-input">
-                    <option value="NO">NO</option>
+                    <option value="NO" selected>NO</option>
                     <option value="SI">SI</option>
                 </select>
             </td>
@@ -478,15 +488,15 @@
             <td class="col-N cell-center">33</td>
             <td colspan="2">Presenta pérdida de pintura</td>
             <td colspan="3" class="cell-center">
-                <select name="p_corrosion_17" class="select-input">
+                <select name="p_corrosion_17" class="select-input" required>
                     <option value="NA">NA</option>
                     <option value="SI">SI</option>
-                    <option value="NO">NO</option>
+                    <option value="NO" selected>NO</option>
                 </select>
             </td>
             <td colspan="2" class="cell-center">
                 <select name="p_corrosion_17_paraliza" class="select-input">
-                    <option value="NO">NO</option>
+                    <option value="NO" selected>NO</option>
                     <option value="SI">SI</option>
                 </select>
             </td>
@@ -496,36 +506,35 @@
             <td class="col-N cell-center">34</td>
             <td colspan="2">Presenta pérdida de galvanizado</td>
             <td colspan="3" class="cell-center">
-                <select name="p_corrosion_18" class="select-input">
+                <select name="p_corrosion_18" class="select-input" required>
                     <option value="NA">NA</option>
                     <option value="SI">SI</option>
-                    <option value="NO">NO</option>
+                    <option value="NO" selected>NO</option>
                 </select>
             </td>
             <td colspan="2" class="cell-center">
                 <select name="p_corrosion_18_paraliza" class="select-input">
-                    <option value="NO">NO</option>
+                    <option value="NO" selected>NO</option>
                     <option value="SI">SI</option>
                 </select>
             </td>
             <td colspan="5"><input type="text" name="p_corrosion_18_comentario"></td>
         </tr>
 
-        <!-- GRUPO: ALINEAMIENTO -->
         <tr class="sub-header"><td colspan="13">ALINEAMIENTO Y ESTABILIDAD</td></tr>
         <tr>
             <td class="col-N cell-center">35</td>
             <td colspan="2">Presenta deformación visible (>2%)</td>
             <td colspan="3" class="cell-center">
-                <select name="p_alineamiento_1" class="select-input">
+                <select name="p_alineamiento_1" class="select-input" required>
                     <option value="NA">NA</option>
                     <option value="SI">SI</option>
-                    <option value="NO">NO</option>
+                    <option value="NO" selected>NO</option>
                 </select>
             </td>
             <td colspan="2" class="cell-center">
                 <select name="p_alineamiento_1_paraliza" class="select-input">
-                    <option value="NO">NO</option>
+                    <option value="NO" selected>NO</option>
                     <option value="SI">SI</option>
                 </select>
             </td>
@@ -535,36 +544,35 @@
             <td class="col-N cell-center">36</td>
             <td colspan="2">Presenta movimiento perceptible</td>
             <td colspan="3" class="cell-center">
-                <select name="p_alineamiento_2" class="select-input">
+                <select name="p_alineamiento_2" class="select-input" required>
                     <option value="NA">NA</option>
                     <option value="SI">SI</option>
-                    <option value="NO">NO</option>
+                    <option value="NO" selected>NO</option>
                 </select>
             </td>
             <td colspan="2" class="cell-center">
                 <select name="p_alineamiento_2_paraliza" class="select-input">
-                    <option value="NO">NO</option>
+                    <option value="NO" selected>NO</option>
                     <option value="SI">SI</option>
                 </select>
             </td>
             <td colspan="5"><input type="text" name="p_alineamiento_2_comentario"></td>
         </tr>
 
-        <!-- GRUPO: ADICIONALES -->
         <tr class="sub-header"><td colspan="13">ADICIONALES</td></tr>
         <tr>
             <td class="col-N cell-center">40</td>
             <td colspan="2">Presenta empozamiento de agua</td>
             <td colspan="3" class="cell-center">
-                <select name="p_adicional_1" class="select-input">
+                <select name="p_adicional_1" class="select-input" required>
                     <option value="NA">NA</option>
                     <option value="SI">SI</option>
-                    <option value="NO">NO</option>
+                    <option value="NO" selected>NO</option>
                 </select>
             </td>
             <td colspan="2" class="cell-center">
                 <select name="p_adicional_1_paraliza" class="select-input">
-                    <option value="NO">NO</option>
+                    <option value="NO" selected>NO</option>
                     <option value="SI">SI</option>
                 </select>
             </td>
@@ -574,37 +582,35 @@
             <td class="col-N cell-center">44</td>
             <td colspan="2">Presenta crecimiento de vegetación</td>
             <td colspan="3" class="cell-center">
-                <select name="p_adicional_5" class="select-input">
+                <select name="p_adicional_5" class="select-input" required>
                     <option value="NA">NA</option>
                     <option value="SI">SI</option>
-                    <option value="NO">NO</option>
+                    <option value="NO" selected>NO</option>
                 </select>
             </td>
             <td colspan="2" class="cell-center">
                 <select name="p_adicional_5_paraliza" class="select-input">
-                    <option value="NO">NO</option>
+                    <option value="NO" selected>NO</option>
                     <option value="SI">SI</option>
                 </select>
             </td>
             <td colspan="5"><input type="text" name="p_adicional_5_comentario"></td>
         </tr>
 
-        <!-- V. RESULTADO -->
         <tr><td colspan="13" class="header-blue">V. RESULTADO DE LA INSPECCIÓN</td></tr>
         <tr>
             <td colspan="4" class="header-blue">Cantidad de SI/NO</td>
-            <td colspan="9"><input type="text" name="cantidad_sino" placeholder="Cálculo manual por ahora"></td>
+            <td colspan="9"><span class="read-only-result">CALCULADO AUTOMÁTICAMENTE</span></td>
         </tr>
         <tr>
             <td colspan="4" class="header-blue">Cantidad Preguntas Aplicables</td>
-            <td colspan="9"><input type="text" name="cantidad_preguntas_aplicables"></td>
+            <td colspan="9"><span class="read-only-result">CALCULADO AUTOMÁTICAMENTE</span></td>
         </tr>
         <tr>
             <td colspan="4" class="header-blue">Calificación Lograda %</td>
-            <td colspan="9"><input type="text" name="calificacion_lograda"></td>
+            <td colspan="9"><span class="read-only-result">CALCULADO AUTOMÁTICAMENTE</span></td>
         </tr>
 
-        <!-- FOTO + SUBMIT -->
         <tr>
             <td colspan="13">
                 <div class="photo-section">
@@ -642,8 +648,8 @@
         statusDiv.className = "";
 
         try {
-            // 🔴 URL DE TU BACKEND EN RENDER (Ya está configurada)
-            const URL_BACKEND = "https://backend-reportes-excel.onrender.com/generar-reporte";
+            // 🔴 IMPORTANTE: Reemplaza esta URL con la URL de tu backend en Render
+            const URL_BACKEND = "https://backend-reportes-excel.onrender.com/generar-reporte"; 
 
             const response = await fetch(URL_BACKEND, {
                 method: 'POST',
@@ -656,7 +662,8 @@
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `Reporte_${formData.get('nombre_site') || 'OOCC'}.xlsx`;
+            // Usamos 'site_nombre' para el nombre del archivo
+            a.download = `Reporte_${formData.get('site_nombre') || 'OOCC'}.xlsx`; 
             document.body.appendChild(a);
             a.click();
             a.remove();
