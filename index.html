@@ -8,7 +8,7 @@
         /* Estilos básicos para el formato simple de la plantilla */
         body { font-family: Arial, sans-serif; margin: 20px; }
         form { max-width: 800px; margin: 0 auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; }
-        input[type="text"], input[type="date"], select { 
+        input[type="text"], input[type="date"], select, textarea { 
             width: 100%; padding: 8px; margin: 5px 0 10px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; 
         }
         button { 
@@ -20,7 +20,9 @@
         .question-row { display: flex; align-items: center; margin-bottom: 5px; }
         .question-row label.q-number { width: 5%; font-weight: bold; }
         .question-row label.q-text { width: 45%; }
+        /* Ajuste de ancho para los selectores de respuesta y paralización */
         .question-row select { width: 12%; margin: 0 5px; padding: 5px; }
+        .question-row select[name$="_paralizacion"] { width: 12%; } /* Específico para paralización */
         .question-row input[type="text"] { width: 26%; margin: 0 5px; padding: 5px; }
 
         /* Estilos para el personal, alineando los 4 inputs de cada persona */
@@ -28,11 +30,15 @@
         .personal-row label { width: 15%; font-weight: bold; align-self: center; }
         .personal-row input { width: 21%; margin-right: 1%; } 
 
+        /* Estilos para el mensaje de estado (usado en JS) */
+        #status-msg { margin-top: 10px; padding: 10px; border-radius: 4px; font-weight: bold; text-align: center; }
+        .text-success { background-color: #d4edda; color: #155724; }
+        .text-error { background-color: #f8d7da; color: #721c24; }
     </style>
 </head>
 <body>
 
-<form id="reporte-form">
+<form id="reporte-form" action="https://backend-reportes-excel.onrender.com/generar-reporte" method="POST" enctype="multipart/form-data">
     <h1>Reporte de Inspección Estructural</h1>
     
     <hr>
@@ -139,7 +145,7 @@
         <input type="text" name="inspector_01_nombre" placeholder="Nombre (D28)">
         <input type="text" name="inspector_01_cargo" placeholder="Cargo (H28)">
         <input type="text" name="inspector_01_empresa" placeholder="Empresa (O28)">
-        <input type="text" name="inspector_01_dni" placeholder="DNI (T28)">
+        <input type="text" name="inspector_01_dni" placeholder="D28)">
     </div>
     
     <h3>Inspector 2</h3>
@@ -148,7 +154,7 @@
         <input type="text" name="inspector_02_nombre" placeholder="Nombre (D29)">
         <input type="text" name="inspector_02_cargo" placeholder="Cargo (H29)">
         <input type="text" name="inspector_02_empresa" placeholder="Empresa (O29)">
-        <input type="text" name="inspector_02_dni" placeholder="DNI (T29)">
+        <input type="text" name="inspector_02_dni" placeholder="D29)">
     </div>
 
     <label for="fecha_inicio">Fecha inicio de supervisión (F30):</label>
@@ -167,24 +173,24 @@
     <div class="question-row">
         <label class="q-number">1.</label>
         <label class="q-text">Presenta fisuras en el concreto (G34/I34):</label>
-        <select name="p_concreto_1" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
-        <select name="p_concreto_1_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <select name="p_concreto_1" required><option value="NO" selected>NO</option><option value="SI">SI</option><option value="NA">NA</option></select>
+        <select name="p_concreto_1_paralizacion"><option value="NO" selected>NO</option><option value="SI">SI"></option></select>
         <input type="text" name="p_concreto_1_comentario" placeholder="Comentario (K34)">
     </div>
 
     <div class="question-row">
         <label class="q-number">2.</label>
         <label class="q-text">Presenta desprendimientos (G35/I35):</label>
-        <select name="p_concreto_2" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
-        <select name="p_concreto_2_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <select name="p_concreto_2" required><option value="NO" selected>NO</option><option value="SI">SI</option><option value="NA">NA</option></select>
+        <select name="p_concreto_2_paralizacion"><option value="NO" selected>NO</option><option value="SI">SI"></option></select>
         <input type="text" name="p_concreto_2_comentario" placeholder="Comentario (K35)">
     </div>
     
     <div class="question-row">
         <label class="q-number">3.</label>
         <label class="q-text">Presenta humedad (G36/I36):</label>
-        <select name="p_concreto_3" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
-        <select name="p_concreto_3_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <select name="p_concreto_3" required><option value="NO" selected>NO</option><option value="SI">SI</option><option value="NA">NA</option></select>
+        <select name="p_concreto_3_paralizacion"><option value="NO" selected>NO</option><option value="SI">SI"></option></select>
         <input type="text" name="p_concreto_3_comentario" placeholder="Comentario (K36)">
     </div>
 
@@ -193,24 +199,24 @@
     <div class="question-row">
         <label class="q-number">4.</label>
         <label class="q-text">Presenta grouting (G38/I38):</label>
-        <select name="p_anclaje_1" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
-        <select name="p_anclaje_1_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <select name="p_anclaje_1" required><option value="NO" selected>NO</option><option value="SI">SI</option><option value="NA">NA</option></select>
+        <select name="p_anclaje_1_paralizacion"><option value="NO" selected>NO</option><option value="SI">SI"></option></select>
         <input type="text" name="p_anclaje_1_comentario" placeholder="Comentario (K38)">
     </div>
 
     <div class="question-row">
         <label class="q-number">5.</label>
         <label class="q-text">Presenta óxido (G39/I39):</label>
-        <select name="p_anclaje_2" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
-        <select name="p_anclaje_2_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <select name="p_anclaje_2" required><option value="NO" selected>NO</option><option value="SI">SI</option><option value="NA">NA</option></select>
+        <select name="p_anclaje_2_paralizacion"><option value="NO" selected>NO</option><option value="SI">SI"></option></select>
         <input type="text" name="p_anclaje_2_comentario" placeholder="Comentario (K39)">
     </div>
 
     <div class="question-row">
         <label class="q-number">6.</label>
         <label class="q-text">Presenta tuerca y contra tuerca (G40/I40):</label>
-        <select name="p_anclaje_3" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
-        <select name="p_anclaje_3_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <select name="p_anclaje_3" required><option value="NO" selected>NO</option><option value="SI">SI</option><option value="NA">NA</option></select>
+        <select name="p_anclaje_3_paralizacion"><option value="NO" selected>NO</option><option value="SI">SI"></option></select>
         <input type="text" name="p_anclaje_3_comentario" placeholder="Comentario (K40)">
     </div>
 
@@ -219,32 +225,32 @@
     <div class="question-row">
         <label class="q-number">7.</label>
         <label class="q-text">Presenta deformación (G42/I42):</label>
-        <select name="p_base_1" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
-        <select name="p_base_1_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <select name="p_base_1" required><option value="NO" selected>NO</option><option value="SI">SI</option><option value="NA">NA</option></select>
+        <select name="p_base_1_paralizacion"><option value="NO" selected>NO</option><option value="SI">SI"></option></select>
         <input type="text" name="p_base_1_comentario" placeholder="Comentario (K42)">
     </div>
     
     <div class="question-row">
         <label class="q-number">8.</label>
         <label class="q-text">Presenta óxido (G43/I43):</label>
-        <select name="p_base_2" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
-        <select name="p_base_2_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <select name="p_base_2" required><option value="NO" selected>NO</option><option value="SI">SI</option><option value="NA">NA</option></select>
+        <select name="p_base_2_paralizacion"><option value="NO" selected>NO</option><option value="SI">SI"></option></select>
         <input type="text" name="p_base_2_comentario" placeholder="Comentario (K43)">
     </div>
 
     <div class="question-row">
         <label class="q-number">9.</label>
         <label class="q-text">Presenta fisuras en la plancha (G44/I44):</label>
-        <select name="p_base_3" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
-        <select name="p_base_3_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <select name="p_base_3" required><option value="NO" selected>NO</option><option value="SI">SI</option><option value="NA">NA</option></select>
+        <select name="p_base_3_paralizacion"><option value="NO" selected>NO</option><option value="SI">SI"></option></select>
         <input type="text" name="p_base_3_comentario" placeholder="Comentario (K44)">
     </div>
     
     <div class="question-row">
         <label class="q-number">10.</label>
         <label class="q-text">Presenta fisuras en la soldadura (G45/I45):</label>
-        <select name="p_base_4" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
-        <select name="p_base_4_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <select name="p_base_4" required><option value="NO" selected>NO</option><option value="SI">SI</option><option value="NA">NA</option></select>
+        <select name="p_base_4_paralizacion"><option value="NO" selected>NO</option><option value="SI">SI"></option></select>
         <input type="text" name="p_base_4_comentario" placeholder="Comentario (K45)">
     </div>
 
@@ -253,48 +259,48 @@
     <div class="question-row">
         <label class="q-number">11.</label>
         <label class="q-text">Presenta pernos faltantes (>30%) (G47/I47):</label>
-        <select name="p_conexion_1" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
-        <select name="p_conexion_1_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <select name="p_conexion_1" required><option value="NO" selected>NO</option><option value="SI">SI</option><option value="NA">NA</option></select>
+        <select name="p_conexion_1_paralizacion"><option value="NO" selected>NO</option><option value="SI">SI"></option></select>
         <input type="text" name="p_conexion_1_comentario" placeholder="Comentario (K47)">
     </div>
     
     <div class="question-row">
         <label class="q-number">12.</label>
         <label class="q-text">Presenta óxido en los pernos (G48/I48):</label>
-        <select name="p_conexion_2" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
-        <select name="p_conexion_2_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <select name="p_conexion_2" required><option value="NO" selected>NO</option><option value="SI">SI</option><option value="NA">NA</option></select>
+        <select name="p_conexion_2_paralizacion"><option value="NO" selected>NO</option><option value="SI">SI"></option></select>
         <input type="text" name="p_conexion_2_comentario" placeholder="Comentario (K48)">
     </div>
 
     <div class="question-row">
         <label class="q-number">13.</label>
         <label class="q-text">Presenta tuerca y contra tuerca (G49/I49):</label>
-        <select name="p_conexion_3" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
-        <select name="p_conexion_3_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <select name="p_conexion_3" required><option value="NO" selected>NO</option><option value="SI">SI</option><option value="NA">NA</option></select>
+        <select name="p_conexion_3_paralizacion"><option value="NO" selected>NO</option><option value="SI">SI"></option></select>
         <input type="text" name="p_conexion_3_comentario" placeholder="Comentario (K49)">
     </div>
 
     <div class="question-row">
         <label class="q-number">14.</label>
         <label class="q-text">Presenta óxido en planchas (G50/I50):</label>
-        <select name="p_conexion_4" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
-        <select name="p_conexion_4_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <select name="p_conexion_4" required><option value="NO" selected>NO</option><option value="SI">SI</option><option value="NA">NA</option></select>
+        <select name="p_conexion_4_paralizacion"><option value="NO" selected>NO</option><option value="SI">SI"></option></select>
         <input type="text" name="p_conexion_4_comentario" placeholder="Comentario (K50)">
     </div>
     
     <div class="question-row">
         <label class="q-number">15.</label>
         <label class="q-text">Presenta fisuras en la plancha (G51/I51):</label>
-        <select name="p_conexion_5" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
-        <select name="p_conexion_5_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <select name="p_conexion_5" required><option value="NO" selected>NO</option><option value="SI">SI</option><option value="NA">NA</option></select>
+        <select name="p_conexion_5_paralizacion"><option value="NO" selected>NO</option><option value="SI">SI"></option></select>
         <input type="text" name="p_conexion_5_comentario" placeholder="Comentario (K51)">
     </div>
 
     <div class="question-row">
         <label class="q-number">16.</label>
         <label class="q-text">Presenta fisuras en la soldadura (G52/I52):</label>
-        <select name="p_conexion_6" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
-        <select name="p_conexion_6_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <select name="p_conexion_6" required><option value="NO" selected>NO</option><option value="SI">SI</option><option value="NA">NA</option></select>
+        <select name="p_conexion_6_paralizacion"><option value="NO" selected>NO</option><option value="SI">SI"></option></select>
         <input type="text" name="p_conexion_6_comentario" placeholder="Comentario (K52)">
     </div>
 
@@ -303,144 +309,144 @@
     <div class="question-row">
         <label class="q-number">17.</label>
         <label class="q-text">Presenta óxido en montantes (G54/I54):</label>
-        <select name="p_corrosion_1" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
-        <select name="p_corrosion_1_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <select name="p_corrosion_1" required><option value="NO" selected>NO</option><option value="SI">SI</option><option value="NA">NA</option></select>
+        <select name="p_corrosion_1_paralizacion"><option value="NO" selected>NO</option><option value="SI">SI"></option></select>
         <input type="text" name="p_corrosion_1_comentario" placeholder="Comentario (K54)">
     </div>
 
     <div class="question-row">
         <label class="q-number">18.</label>
         <label class="q-text">Presenta óxido en diagonales (G55/I55):</label>
-        <select name="p_corrosion_2" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
-        <select name="p_corrosion_2_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <select name="p_corrosion_2" required><option value="NO" selected>NO</option><option value="SI">SI</option><option value="NA">NA</option></select>
+        <select name="p_corrosion_2_paralizacion"><option value="NO" selected>NO</option><option value="SI">SI"></option></select>
         <input type="text" name="p_corrosion_2_comentario" placeholder="Comentario (K55)">
     </div>
 
     <div class="question-row">
         <label class="q-number">19.</label>
         <label class="q-text">Presenta óxido en redundantes (G56/I56):</label>
-        <select name="p_corrosion_3" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
-        <select name="p_corrosion_3_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <select name="p_corrosion_3" required><option value="NO" selected>NO</option><option value="SI">SI</option><option value="NA">NA</option></select>
+        <select name="p_corrosion_3_paralizacion"><option value="NO" selected>NO</option><option value="SI">SI"></option></select>
         <input type="text" name="p_corrosion_3_comentario" placeholder="Comentario (K56)">
     </div>
 
     <div class="question-row">
         <label class="q-number">20.</label>
         <label class="q-text">Presenta óxido en horizontales (G57/I57):</label>
-        <select name="p_corrosion_4" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
-        <select name="p_corrosion_4_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <select name="p_corrosion_4" required><option value="NO" selected>NO</option><option value="SI">SI</option><option value="NA">NA</option></select>
+        <select name="p_corrosion_4_paralizacion"><option value="NO" selected>NO</option><option value="SI">SI"></option></select>
         <input type="text" name="p_corrosion_4_comentario" placeholder="Comentario (K57)">
     </div>
 
     <div class="question-row">
         <label class="q-number">21.</label>
         <label class="q-text">Presenta óxido en escaleras de acceso y cables (G58/I58):</label>
-        <select name="p_corrosion_5" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
-        <select name="p_corrosion_5_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <select name="p_corrosion_5" required><option value="NO" selected>NO</option><option value="SI">SI</option><option value="NA">NA</option></select>
+        <select name="p_corrosion_5_paralizacion"><option value="NO" selected>NO</option><option value="SI">SI"></option></select>
         <input type="text" name="p_corrosion_5_comentario" placeholder="Comentario (K58)">
     </div>
 
     <div class="question-row">
         <label class="q-number">22.</label>
         <label class="q-text">Presenta óxido en línea de vida (G59/I59):</label>
-        <select name="p_corrosion_6" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
-        <select name="p_corrosion_6_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <select name="p_corrosion_6" required><option value="NO" selected>NO</option><option value="SI">SI</option><option value="NA">NA</option></select>
+        <select name="p_corrosion_6_paralizacion"><option value="NO" selected>NO</option><option value="SI">SI"></option></select>
         <input type="text" name="p_corrosion_6_comentario" placeholder="Comentario (K59)">
     </div>
 
     <div class="question-row">
         <label class="q-number">23.</label>
         <label class="q-text">Presenta óxido en roldanas (G60/I60):</label>
-        <select name="p_corrosion_7" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
-        <select name="p_corrosion_7_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <select name="p_corrosion_7" required><option value="NO" selected>NO</option><option value="SI">SI</option><option value="NA">NA</option></select>
+        <select name="p_corrosion_7_paralizacion"><option value="NO" selected>NO</option><option value="SI">SI"></option></select>
         <input type="text" name="p_corrosion_7_comentario" placeholder="Comentario (K60)">
     </div>
 
     <div class="question-row">
         <label class="q-number">24.</label>
         <label class="q-text">Presenta óxido en soportes (G61/I61):</label>
-        <select name="p_corrosion_8" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
-        <select name="p_corrosion_8_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <select name="p_corrosion_8" required><option value="NO" selected>NO</option><option value="SI">SI</option><option value="NA">NA</option></select>
+        <select name="p_corrosion_8_paralizacion"><option value="NO" selected>NO</option><option value="SI">SI"></option></select>
         <input type="text" name="p_corrosion_8_comentario" placeholder="Comentario (K61)">
     </div>
 
     <div class="question-row">
         <label class="q-number">25.</label>
         <label class="q-text">Presenta corrosión en montantes (G62/I62):</label>
-        <select name="p_corrosion_9" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
-        <select name="p_corrosion_9_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <select name="p_corrosion_9" required><option value="NO" selected>NO</option><option value="SI">SI</option><option value="NA">NA</option></select>
+        <select name="p_corrosion_9_paralizacion"><option value="NO" selected>NO</option><option value="SI">SI"></option></select>
         <input type="text" name="p_corrosion_9_comentario" placeholder="Comentario (K62)">
     </div>
 
     <div class="question-row">
         <label class="q-number">26.</label>
         <label class="q-text">Presenta corrosión en diagonales (G63/I63):</label>
-        <select name="p_corrosion_10" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
-        <select name="p_corrosion_10_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <select name="p_corrosion_10" required><option value="NO" selected>NO</option><option value="SI">SI</option><option value="NA">NA</option></select>
+        <select name="p_corrosion_10_paralizacion"><option value="NO" selected>NO</option><option value="SI">SI"></option></select>
         <input type="text" name="p_corrosion_10_comentario" placeholder="Comentario (K63)">
     </div>
 
     <div class="question-row">
         <label class="q-number">27.</label>
         <label class="q-text">Presenta corrosión en redundantes (G64/I64):</label>
-        <select name="p_corrosion_11" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
-        <select name="p_corrosion_11_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <select name="p_corrosion_11" required><option value="NO" selected>NO</option><option value="SI">SI</option><option value="NA">NA</option></select>
+        <select name="p_corrosion_11_paralizacion"><option value="NO" selected>NO</option><option value="SI">SI"></option></select>
         <input type="text" name="p_corrosion_11_comentario" placeholder="Comentario (K64)">
     </div>
 
     <div class="question-row">
         <label class="q-number">28.</label>
         <label class="q-text">Presenta corrosión en horizontales (G65/I65):</label>
-        <select name="p_corrosion_12" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
-        <select name="p_corrosion_12_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <select name="p_corrosion_12" required><option value="NO" selected>NO</option><option value="SI">SI</option><option value="NA">NA</option></select>
+        <select name="p_corrosion_12_paralizacion"><option value="NO" selected>NO</option><option value="SI">SI"></option></select>
         <input type="text" name="p_corrosion_12_comentario" placeholder="Comentario (K65)">
     </div>
 
     <div class="question-row">
         <label class="q-number">29.</label>
         <label class="q-text">Presenta corrosión en escaleras de acceso y cables (G66/I66):</label>
-        <select name="p_corrosion_13" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
-        <select name="p_corrosion_13_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <select name="p_corrosion_13" required><option value="NO" selected>NO</option><option value="SI">SI</option><option value="NA">NA</option></select>
+        <select name="p_corrosion_13_paralizacion"><option value="NO" selected>NO</option><option value="SI">SI"></option></select>
         <input type="text" name="p_corrosion_13_comentario" placeholder="Comentario (K66)">
     </div>
 
     <div class="question-row">
         <label class="q-number">30.</label>
         <label class="q-text">Presenta corrosión en línea de vida (G67/I67):</label>
-        <select name="p_corrosion_14" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
-        <select name="p_corrosion_14_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <select name="p_corrosion_14" required><option value="NO" selected>NO</option><option value="SI">SI</option><option value="NA">NA</option></select>
+        <select name="p_corrosion_14_paralizacion"><option value="NO" selected>NO</option><option value="SI">SI"></option></select>
         <input type="text" name="p_corrosion_14_comentario" placeholder="Comentario (K67)">
     </div>
 
     <div class="question-row">
         <label class="q-number">31.</label>
         <label class="q-text">Presenta corrosión en roldanas (G68/I68):</label>
-        <select name="p_corrosion_15" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
-        <select name="p_corrosion_15_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <select name="p_corrosion_15" required><option value="NO" selected>NO</option><option value="SI">SI</option><option value="NA">NA</option></select>
+        <select name="p_corrosion_15_paralizacion"><option value="NO" selected>NO</option><option value="SI">SI"></option></select>
         <input type="text" name="p_corrosion_15_comentario" placeholder="Comentario (K68)">
     </div>
 
     <div class="question-row">
         <label class="q-number">32.</label>
         <label class="q-text">Presenta corrosión en soportes (G69/I69):</label>
-        <select name="p_corrosion_16" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
-        <select name="p_corrosion_16_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <select name="p_corrosion_16" required><option value="NO" selected>NO</option><option value="SI">SI</option><option value="NA">NA</option></select>
+        <select name="p_corrosion_16_paralizacion"><option value="NO" selected>NO</option><option value="SI">SI"></option></select>
         <input type="text" name="p_corrosion_16_comentario" placeholder="Comentario (K69)">
     </div>
 
     <div class="question-row">
         <label class="q-number">33.</label>
         <label class="q-text">Presenta pérdida de pintura (G70/I70):</label>
-        <select name="p_corrosion_17" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
-        <select name="p_corrosion_17_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <select name="p_corrosion_17" required><option value="NO" selected>NO</option><option value="SI">SI</option><option value="NA">NA</option></select>
+        <select name="p_corrosion_17_paralizacion"><option value="NO" selected>NO</option><option value="SI">SI"></option></select>
         <input type="text" name="p_corrosion_17_comentario" placeholder="Comentario (K70)">
     </div>
 
     <div class="question-row">
         <label class="q-number">34.</label>
         <label class="q-text">Presenta pérdida de galvanizado (G71/I71):</label>
-        <select name="p_corrosion_18" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
-        <select name="p_corrosion_18_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <select name="p_corrosion_18" required><option value="NO" selected>NO</option><option value="SI">SI</option><option value="NA">NA</option></select>
+        <select name="p_corrosion_18_paralizacion"><option value="NO" selected>NO</option><option value="SI">SI"></option></select>
         <input type="text" name="p_corrosion_18_comentario" placeholder="Comentario (K71)">
     </div>
 
@@ -449,40 +455,40 @@
     <div class="question-row">
         <label class="q-number">35.</label>
         <label class="q-text">Presenta deformación visible sobre su eje vertical (mayor al 2%) (G73/I73):</label>
-        <select name="p_alineamiento_1" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
-        <select name="p_alineamiento_1_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <select name="p_alineamiento_1" required><option value="NO" selected>NO</option><option value="SI">SI</option><option value="NA">NA</option></select>
+        <select name="p_alineamiento_1_paralizacion"><option value="NO" selected>NO</option><option value="SI">SI"></option></select>
         <input type="text" name="p_alineamiento_1_comentario" placeholder="Comentario (K73)">
     </div>
 
     <div class="question-row">
         <label class="q-number">36.</label>
         <label class="q-text">Presenta movimiento perceptible en tope de torre (G74/I74):</label>
-        <select name="p_alineamiento_2" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
-        <select name="p_alineamiento_2_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <select name="p_alineamiento_2" required><option value="NO" selected>NO</option><option value="SI">SI</option><option value="NA">NA</option></select>
+        <select name="p_alineamiento_2_paralizacion"><option value="NO" selected>NO</option><option value="SI">SI"></option></select>
         <input type="text" name="p_alineamiento_2_comentario" placeholder="Comentario (K74)">
     </div>
 
     <div class="question-row">
         <label class="q-number">37.</label>
         <label class="q-text">Presenta tensión adecuada en vientos (G75/I75):</label>
-        <select name="p_alineamiento_3" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
-        <select name="p_alineamiento_3_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <select name="p_alineamiento_3" required><option value="NO" selected>NO</option><option value="SI">SI</option><option value="NA">NA</option></select>
+        <select name="p_alineamiento_3_paralizacion"><option value="NO" selected>NO</option><option value="SI">SI"></option></select>
         <input type="text" name="p_alineamiento_3_comentario" placeholder="Comentario (K75)">
     </div>
 
     <div class="question-row">
         <label class="q-number">38.</label>
         <label class="q-text">Presenta fijación adecuada de contravientos (G76/I76):</label>
-        <select name="p_alineamiento_4" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
-        <select name="p_alineamiento_4_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <select name="p_alineamiento_4" required><option value="NO" selected>NO</option><option value="SI">SI</option><option value="NA">NA</option></select>
+        <select name="p_alineamiento_4_paralizacion"><option value="NO" selected>NO</option><option value="SI">SI"></option></select>
         <input type="text" name="p_alineamiento_4_comentario" placeholder="Comentario (K76)">
     </div>
 
     <div class="question-row">
         <label class="q-number">39.</label>
         <label class="q-text">Línea de vida no presenta continuidad (G77/I77):</label>
-        <select name="p_alineamiento_5" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
-        <select name="p_alineamiento_5_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <select name="p_alineamiento_5" required><option value="NO" selected>NO</option><option value="SI">SI</option><option value="NA">NA</option></select>
+        <select name="p_alineamiento_5_paralizacion"><option value="NO" selected>NO</option><option value="SI">SI"></option></select>
         <input type="text" name="p_alineamiento_5_comentario" placeholder="Comentario (K77)">
     </div>
 
@@ -491,48 +497,48 @@
     <div class="question-row">
         <label class="q-number">40.</label>
         <label class="q-text">Presenta empozamiento de agua (G79/I79):</label>
-        <select name="p_adicional_1" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
-        <select name="p_adicional_1_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <select name="p_adicional_1" required><option value="NO" selected>NO</option><option value="SI">SI</option><option value="NA">NA</option></select>
+        <select name="p_adicional_1_paralizacion"><option value="NO" selected>NO</option><option value="SI">SI"></option></select>
         <input type="text" name="p_adicional_1_comentario" placeholder="Comentario (K79)">
     </div>
 
     <div class="question-row">
         <label class="q-number">41.</label>
         <label class="q-text">Presenta filtraciones (G80/I80):</label>
-        <select name="p_adicional_2" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
-        <select name="p_adicional_2_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <select name="p_adicional_2" required><option value="NO" selected>NO</option><option value="SI">SI</option><option value="NA">NA</option></select>
+        <select name="p_adicional_2_paralizacion"><option value="NO" selected>NO</option><option value="SI">SI"></option></select>
         <input type="text" name="p_adicional_2_comentario" placeholder="Comentario (K80)">
     </div>
 
     <div class="question-row">
         <label class="q-number">42.</label>
         <label class="q-text">Falta de limpieza (G81/I81):</label>
-        <select name="p_adicional_3" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
-        <select name="p_adicional_3_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <select name="p_adicional_3" required><option value="NO" selected>NO</option><option value="SI">SI</option><option value="NA">NA</option></select>
+        <select name="p_adicional_3_paralizacion"><option value="NO" selected>NO</option><option value="SI">SI"></option></select>
         <input type="text" name="p_adicional_3_comentario" placeholder="Comentario (K81)">
     </div>
 
     <div class="question-row">
         <label class="q-number">43.</label>
         <label class="q-text">Acumulación de desperdicios (G82/I82):</label>
-        <select name="p_adicional_4" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
-        <select name="p_adicional_4_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <select name="p_adicional_4" required><option value="NO" selected>NO</option><option value="SI">SI</option><option value="NA">NA</option></select>
+        <select name="p_adicional_4_paralizacion"><option value="NO" selected>NO</option><option value="SI">SI"></option></select>
         <input type="text" name="p_adicional_4_comentario" placeholder="Comentario (K82)">
     </div>
 
     <div class="question-row">
         <label class="q-number">44.</label>
         <label class="q-text">Presenta crecimiento de vegetación (G83/I83):</label>
-        <select name="p_adicional_5" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
-        <select name="p_adicional_5_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <select name="p_adicional_5" required><option value="NO" selected>NO</option><option value="SI">SI</option><option value="NA">NA</option></select>
+        <select name="p_adicional_5_paralizacion"><option value="NO" selected>NO</option><option value="SI">SI"></option></select>
         <input type="text" name="p_adicional_5_comentario" placeholder="Comentario (K83)">
     </div>
 
     <div class="question-row">
         <label class="q-number">45.</label>
         <label class="q-text">Presenta acumulación de heces de aves (G84/I84):</label>
-        <select name="p_adicional_6" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
-        <select name="p_adicional_6_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <select name="p_adicional_6" required><option value="NO" selected>NO</option><option value="SI">SI</option><option value="NA">NA</option></select>
+        <select name="p_adicional_6_paralizacion"><option value="NO" selected>NO</option><option value="SI">SI"></option></select>
         <input type="text" name="p_adicional_6_comentario" placeholder="Comentario (K84)">
     </div>
 
@@ -546,16 +552,20 @@
     <input type="text" disabled value="CALCULADO AUTOMÁTICAMENTE"><br>
     <label>Calificación Lograda % (CALCULADO AUTOMÁTICAMENTE)</label>
     <input type="text" disabled value="CALCULADO AUTOMÁTICAMENTE"><br>
-
+    
     <hr>
 
-    <h2>Reporte Fotográfico</h2>
+    <h2>VI. REPORTE FOTOGRÁFICO</h2>
+    
     <label for="foto">Adjuntar Foto (Obligatorio):</label>
     <input type="file" id="foto" name="foto" accept="image/*" required><br>
-    <input type="text" name="descripcionFoto" placeholder="Descripción de la foto (B24)">
+
+    <label for="descripcionFoto">Descripción de la foto (B24):</label>
+    <textarea id="descripcionFoto" name="descripcionFoto" rows="3" placeholder="Descripción de la foto (B24)"></textarea>
 
     <button type="submit" id="btnSubmit">Generar Reporte Excel</button>
     <div id="status-msg"></div>
+
 </form>
 
 <script>
@@ -565,6 +575,7 @@
         const statusDiv = document.getElementById('status-msg');
         const formData = new FormData(e.target);
 
+        // Validar si el archivo fue realmente subido (el campo 'required' ayuda, pero esto es más robusto)
         if(!formData.get('foto').name) {
             alert("⚠️ Debes subir una foto obligatoriamente.");
             return;
@@ -572,11 +583,11 @@
 
         btn.disabled = true;
         btn.textContent = "⏳ Generando Excel...";
-        statusDiv.textContent = "Procesando datos...";
-        statusDiv.className = "";
+        statusDiv.textContent = "Procesando datos y subiendo imagen...";
+        statusDiv.className = ""; // Limpiar clases anteriores
 
         try {
-            // 🔴 ¡IMPORTANTE! REEMPLAZA ESTA URL con la URL de tu backend en Render 
+            // 🔴 ¡IMPORTANTE! URL de tu backend en Render
             const URL_BACKEND = "https://backend-reportes-excel.onrender.com/generar-reporte"; 
 
             const response = await fetch(URL_BACKEND, {
@@ -584,23 +595,31 @@
                 body: formData
             });
 
-            if (!response.ok) throw new Error(await response.text());
+            if (!response.ok) {
+                // Si hay un error, intentamos leer la respuesta como texto para obtener el mensaje de error del backend
+                const errorText = await response.text();
+                throw new Error(errorText || `Error en el servidor: ${response.status}`);
+            }
 
+            // Descargar el archivo
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
+            // Se usa el nombre del site para nombrar el archivo.
             a.download = `Reporte_${formData.get('nombre_site') || 'OOCC'}.xlsx`; 
             document.body.appendChild(a);
             a.click();
             a.remove();
+            window.URL.revokeObjectURL(url); // Limpiar URL temporal
 
             statusDiv.textContent = "✅ ¡Reporte descargado correctamente!";
             statusDiv.className = "text-success";
 
         } catch (error) {
             console.error(error);
-            statusDiv.textContent = "❌ Error: " + error.message;
+            // El mensaje de error ahora incluye el texto enviado por el backend (si existe)
+            statusDiv.textContent = "❌ Error: " + error.message; 
             statusDiv.className = "text-error";
         } finally {
             btn.disabled = false;
