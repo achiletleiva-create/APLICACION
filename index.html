@@ -54,7 +54,6 @@
         <input type="text" name="personal_01_empresa" placeholder="Empresa (O12)">
         <input type="text" name="personal_01_dni" placeholder="DNI (T12)">
     </div>
-
     <div class="personal-row">
         <label>Personal 02:</label>
         <input type="text" name="personal_01_nombre_2" placeholder="Nombre (D13)">
@@ -62,7 +61,6 @@
         <input type="text" name="personal_01_empresa_2" placeholder="Empresa (O13)">
         <input type="text" name="personal_01_dni_2" placeholder="DNI (T13)">
     </div>
-
     <div class="personal-row">
         <label>Personal 03:</label>
         <input type="text" name="personal_01_nombre_3" placeholder="Nombre (D14)">
@@ -70,7 +68,6 @@
         <input type="text" name="personal_01_empresa_3" placeholder="Empresa (O14)">
         <input type="text" name="personal_01_dni_3" placeholder="DNI (T14)">
     </div>
-
     <div class="personal-row">
         <label>Personal 04:</label>
         <input type="text" name="personal_01_nombre_4" placeholder="Nombre (D15)">
@@ -78,7 +75,6 @@
         <input type="text" name="personal_01_empresa_4" placeholder="Empresa (O15)">
         <input type="text" name="personal_01_dni_4" placeholder="DNI (T15)">
     </div>
-
     <div class="personal-row">
         <label>Personal 05:</label>
         <input type="text" name="personal_01_nombre_5" placeholder="Nombre (D16)">
@@ -136,27 +132,41 @@
     <hr>
 
     <h2>III. DATOS DEL INSPECTOR</h2>
-    <input type="text" name="inspector_nombre" placeholder="Nombre Inspector (D28)"><br>
-    <input type="text" name="inspector_cargo" placeholder="Cargo (I28)"><br>
-    <input type="text" name="inspector_empresa" placeholder="Empresa (O28)"><br>
-    <input type="text" name="inspector_dni" placeholder="DNI (T28)"><br>
+    
+    <h3>Inspector 1</h3>
+    <div class="personal-row">
+        <label>Personal 01:</label>
+        <input type="text" name="inspector_01_nombre" placeholder="Nombre (D28)">
+        <input type="text" name="inspector_01_cargo" placeholder="Cargo (H28)">
+        <input type="text" name="inspector_01_empresa" placeholder="Empresa (O28)">
+        <input type="text" name="inspector_01_dni" placeholder="DNI (T28)">
+    </div>
+    
+    <h3>Inspector 2</h3>
+    <div class="personal-row">
+        <label>Personal 02:</label>
+        <input type="text" name="inspector_02_nombre" placeholder="Nombre (D29)">
+        <input type="text" name="inspector_02_cargo" placeholder="Cargo (H29)">
+        <input type="text" name="inspector_02_empresa" placeholder="Empresa (O29)">
+        <input type="text" name="inspector_02_dni" placeholder="DNI (T29)">
+    </div>
 
-    <label for="fecha_inicio">Fecha de Inspección (F30):</label>
+    <label for="fecha_inicio">Fecha inicio de supervisión (F30):</label>
     <input type="date" id="fecha_inicio" name="fecha_inicio" required><br>
     
-    <label for="fecha_fin">Fecha fin supervisión (R30):</label>
+    <label for="fecha_fin">Fecha fin de supervisión (R30):</label>
     <input type="date" id="fecha_fin" name="fecha_fin"><br>
 
     <hr>
     
     <h2>IV. PREGUNTAS DE VERIFICACIÓN DE ESTRUCTURA</h2>
-    <p>Respuesta (SI/NO/NA) | Aplica Paralización (SI/NO) | Comentarios</p>
+    <p>Respuesta (SI/NO/NA) | Aplica Paralización (SI/NO) | Comentarios (Columna K)</p>
 
     <h3>CIMENTACIÓN - CONDICIONES DEL CONCRETO</h3>
     
     <div class="question-row">
         <label class="q-number">1.</label>
-        <label class="q-text">Presenta fisuras en el concreto (G34/H34/I34):</label>
+        <label class="q-text">Presenta fisuras en el concreto (G34/I34):</label>
         <select name="p_concreto_1" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
         <select name="p_concreto_1_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
         <input type="text" name="p_concreto_1_comentario" placeholder="Comentario (K34)">
@@ -164,7 +174,7 @@
 
     <div class="question-row">
         <label class="q-number">2.</label>
-        <label class="q-text">Presenta desprendimientos (G35/H35/I35):</label>
+        <label class="q-text">Presenta desprendimientos (G35/I35):</label>
         <select name="p_concreto_2" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
         <select name="p_concreto_2_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
         <input type="text" name="p_concreto_2_comentario" placeholder="Comentario (K35)">
@@ -172,17 +182,17 @@
     
     <div class="question-row">
         <label class="q-number">3.</label>
-        <label class="q-text">Presenta humedad (G36/H36/I36):</label>
+        <label class="q-text">Presenta humedad (G36/I36):</label>
         <select name="p_concreto_3" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
         <select name="p_concreto_3_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
         <input type="text" name="p_concreto_3_comentario" placeholder="Comentario (K36)">
     </div>
 
-    <h3>CIMENTACIÓN - ESTADO DE ANCLAJES</h3>
+    <h3>CIMENTACIÓN - ESTADO DE ANCLAJES Y PERNOS DE CIMENTACIÓN</h3>
     
     <div class="question-row">
         <label class="q-number">4.</label>
-        <label class="q-text">Presenta grouting (G38/H38/I38):</label>
+        <label class="q-text">Presenta grouting (G38/I38):</label>
         <select name="p_anclaje_1" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
         <select name="p_anclaje_1_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
         <input type="text" name="p_anclaje_1_comentario" placeholder="Comentario (K38)">
@@ -190,7 +200,7 @@
 
     <div class="question-row">
         <label class="q-number">5.</label>
-        <label class="q-text">Presenta codo (doblado) (G39/H39/I39):</label>
+        <label class="q-text">Presenta óxido (G39/I39):</label>
         <select name="p_anclaje_2" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
         <select name="p_anclaje_2_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
         <input type="text" name="p_anclaje_2_comentario" placeholder="Comentario (K39)">
@@ -198,7 +208,7 @@
 
     <div class="question-row">
         <label class="q-number">6.</label>
-        <label class="q-text">Presenta tuerca y contra tuerca (G40/H40/I40):</label>
+        <label class="q-text">Presenta tuerca y contra tuerca (G40/I40):</label>
         <select name="p_anclaje_3" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
         <select name="p_anclaje_3_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
         <input type="text" name="p_anclaje_3_comentario" placeholder="Comentario (K40)">
@@ -208,7 +218,7 @@
 
     <div class="question-row">
         <label class="q-number">7.</label>
-        <label class="q-text">Presenta deformación (G42/H42/I42):</label>
+        <label class="q-text">Presenta deformación (G42/I42):</label>
         <select name="p_base_1" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
         <select name="p_base_1_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
         <input type="text" name="p_base_1_comentario" placeholder="Comentario (K42)">
@@ -216,7 +226,7 @@
     
     <div class="question-row">
         <label class="q-number">8.</label>
-        <label class="q-text">Presenta codo (doblado) (G43/H43/I43):</label>
+        <label class="q-text">Presenta óxido (G43/I43):</label>
         <select name="p_base_2" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
         <select name="p_base_2_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
         <input type="text" name="p_base_2_comentario" placeholder="Comentario (K43)">
@@ -224,38 +234,309 @@
 
     <div class="question-row">
         <label class="q-number">9.</label>
-        <label class="q-text">Presenta fisuras en la plancha (G44/H44/I44):</label>
+        <label class="q-text">Presenta fisuras en la plancha (G44/I44):</label>
         <select name="p_base_3" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
         <select name="p_base_3_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
         <input type="text" name="p_base_3_comentario" placeholder="Comentario (K44)">
     </div>
-
-    <h3>ESTRUCTURA METÁLICA - CONEXIONES</h3>
-
+    
     <div class="question-row">
         <label class="q-number">10.</label>
-        <label class="q-text">Presenta pernos faltantes (>30%) (G47/H47/I47):</label>
+        <label class="q-text">Presenta fisuras en la soldadura (G45/I45):</label>
+        <select name="p_base_4" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
+        <select name="p_base_4_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <input type="text" name="p_base_4_comentario" placeholder="Comentario (K45)">
+    </div>
+
+    <h3>ESTRUCTURA METALICA - CONEXIONES</h3>
+
+    <div class="question-row">
+        <label class="q-number">11.</label>
+        <label class="q-text">Presenta pernos faltantes (>30%) (G47/I47):</label>
         <select name="p_conexion_1" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
         <select name="p_conexion_1_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
         <input type="text" name="p_conexion_1_comentario" placeholder="Comentario (K47)">
     </div>
     
     <div class="question-row">
-        <label class="q-number">11.</label>
-        <label class="q-text">Presenta óxido en los pernos (G48/H48/I48):</label>
+        <label class="q-number">12.</label>
+        <label class="q-text">Presenta óxido en los pernos (G48/I48):</label>
         <select name="p_conexion_2" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
         <select name="p_conexion_2_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
         <input type="text" name="p_conexion_2_comentario" placeholder="Comentario (K48)">
     </div>
 
     <div class="question-row">
-        <label class="q-number">12.</label>
-        <label class="q-text">Presenta tuerca y contra tuerca (G49/H49/I49):</label>
+        <label class="q-number">13.</label>
+        <label class="q-text">Presenta tuerca y contra tuerca (G49/I49):</label>
         <select name="p_conexion_3" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
         <select name="p_conexion_3_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
         <input type="text" name="p_conexion_3_comentario" placeholder="Comentario (K49)">
     </div>
+
+    <div class="question-row">
+        <label class="q-number">14.</label>
+        <label class="q-text">Presenta óxido en planchas (G50/I50):</label>
+        <select name="p_conexion_4" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
+        <select name="p_conexion_4_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <input type="text" name="p_conexion_4_comentario" placeholder="Comentario (K50)">
+    </div>
     
+    <div class="question-row">
+        <label class="q-number">15.</label>
+        <label class="q-text">Presenta fisuras en la plancha (G51/I51):</label>
+        <select name="p_conexion_5" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
+        <select name="p_conexion_5_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <input type="text" name="p_conexion_5_comentario" placeholder="Comentario (K51)">
+    </div>
+
+    <div class="question-row">
+        <label class="q-number">16.</label>
+        <label class="q-text">Presenta fisuras en la soldadura (G52/I52):</label>
+        <select name="p_conexion_6" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
+        <select name="p_conexion_6_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <input type="text" name="p_conexion_6_comentario" placeholder="Comentario (K52)">
+    </div>
+
+    <h3>ESTRUCTURA METALICA - OXIDACIÓN Y CORROSIÓN DE ELEMENTOS ESTRUCTURALES</h3>
+    
+    <div class="question-row">
+        <label class="q-number">17.</label>
+        <label class="q-text">Presenta óxido en montantes (G54/I54):</label>
+        <select name="p_corrosion_1" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
+        <select name="p_corrosion_1_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <input type="text" name="p_corrosion_1_comentario" placeholder="Comentario (K54)">
+    </div>
+
+    <div class="question-row">
+        <label class="q-number">18.</label>
+        <label class="q-text">Presenta óxido en diagonales (G55/I55):</label>
+        <select name="p_corrosion_2" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
+        <select name="p_corrosion_2_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <input type="text" name="p_corrosion_2_comentario" placeholder="Comentario (K55)">
+    </div>
+
+    <div class="question-row">
+        <label class="q-number">19.</label>
+        <label class="q-text">Presenta óxido en redundantes (G56/I56):</label>
+        <select name="p_corrosion_3" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
+        <select name="p_corrosion_3_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <input type="text" name="p_corrosion_3_comentario" placeholder="Comentario (K56)">
+    </div>
+
+    <div class="question-row">
+        <label class="q-number">20.</label>
+        <label class="q-text">Presenta óxido en horizontales (G57/I57):</label>
+        <select name="p_corrosion_4" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
+        <select name="p_corrosion_4_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <input type="text" name="p_corrosion_4_comentario" placeholder="Comentario (K57)">
+    </div>
+
+    <div class="question-row">
+        <label class="q-number">21.</label>
+        <label class="q-text">Presenta óxido en escaleras de acceso y cables (G58/I58):</label>
+        <select name="p_corrosion_5" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
+        <select name="p_corrosion_5_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <input type="text" name="p_corrosion_5_comentario" placeholder="Comentario (K58)">
+    </div>
+
+    <div class="question-row">
+        <label class="q-number">22.</label>
+        <label class="q-text">Presenta óxido en línea de vida (G59/I59):</label>
+        <select name="p_corrosion_6" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
+        <select name="p_corrosion_6_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <input type="text" name="p_corrosion_6_comentario" placeholder="Comentario (K59)">
+    </div>
+
+    <div class="question-row">
+        <label class="q-number">23.</label>
+        <label class="q-text">Presenta óxido en roldanas (G60/I60):</label>
+        <select name="p_corrosion_7" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
+        <select name="p_corrosion_7_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <input type="text" name="p_corrosion_7_comentario" placeholder="Comentario (K60)">
+    </div>
+
+    <div class="question-row">
+        <label class="q-number">24.</label>
+        <label class="q-text">Presenta óxido en soportes (G61/I61):</label>
+        <select name="p_corrosion_8" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
+        <select name="p_corrosion_8_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <input type="text" name="p_corrosion_8_comentario" placeholder="Comentario (K61)">
+    </div>
+
+    <div class="question-row">
+        <label class="q-number">25.</label>
+        <label class="q-text">Presenta corrosión en montantes (G62/I62):</label>
+        <select name="p_corrosion_9" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
+        <select name="p_corrosion_9_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <input type="text" name="p_corrosion_9_comentario" placeholder="Comentario (K62)">
+    </div>
+
+    <div class="question-row">
+        <label class="q-number">26.</label>
+        <label class="q-text">Presenta corrosión en diagonales (G63/I63):</label>
+        <select name="p_corrosion_10" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
+        <select name="p_corrosion_10_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <input type="text" name="p_corrosion_10_comentario" placeholder="Comentario (K63)">
+    </div>
+
+    <div class="question-row">
+        <label class="q-number">27.</label>
+        <label class="q-text">Presenta corrosión en redundantes (G64/I64):</label>
+        <select name="p_corrosion_11" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
+        <select name="p_corrosion_11_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <input type="text" name="p_corrosion_11_comentario" placeholder="Comentario (K64)">
+    </div>
+
+    <div class="question-row">
+        <label class="q-number">28.</label>
+        <label class="q-text">Presenta corrosión en horizontales (G65/I65):</label>
+        <select name="p_corrosion_12" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
+        <select name="p_corrosion_12_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <input type="text" name="p_corrosion_12_comentario" placeholder="Comentario (K65)">
+    </div>
+
+    <div class="question-row">
+        <label class="q-number">29.</label>
+        <label class="q-text">Presenta corrosión en escaleras de acceso y cables (G66/I66):</label>
+        <select name="p_corrosion_13" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
+        <select name="p_corrosion_13_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <input type="text" name="p_corrosion_13_comentario" placeholder="Comentario (K66)">
+    </div>
+
+    <div class="question-row">
+        <label class="q-number">30.</label>
+        <label class="q-text">Presenta corrosión en línea de vida (G67/I67):</label>
+        <select name="p_corrosion_14" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
+        <select name="p_corrosion_14_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <input type="text" name="p_corrosion_14_comentario" placeholder="Comentario (K67)">
+    </div>
+
+    <div class="question-row">
+        <label class="q-number">31.</label>
+        <label class="q-text">Presenta corrosión en roldanas (G68/I68):</label>
+        <select name="p_corrosion_15" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
+        <select name="p_corrosion_15_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <input type="text" name="p_corrosion_15_comentario" placeholder="Comentario (K68)">
+    </div>
+
+    <div class="question-row">
+        <label class="q-number">32.</label>
+        <label class="q-text">Presenta corrosión en soportes (G69/I69):</label>
+        <select name="p_corrosion_16" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
+        <select name="p_corrosion_16_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <input type="text" name="p_corrosion_16_comentario" placeholder="Comentario (K69)">
+    </div>
+
+    <div class="question-row">
+        <label class="q-number">33.</label>
+        <label class="q-text">Presenta pérdida de pintura (G70/I70):</label>
+        <select name="p_corrosion_17" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
+        <select name="p_corrosion_17_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <input type="text" name="p_corrosion_17_comentario" placeholder="Comentario (K70)">
+    </div>
+
+    <div class="question-row">
+        <label class="q-number">34.</label>
+        <label class="q-text">Presenta pérdida de galvanizado (G71/I71):</label>
+        <select name="p_corrosion_18" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
+        <select name="p_corrosion_18_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <input type="text" name="p_corrosion_18_comentario" placeholder="Comentario (K71)">
+    </div>
+
+    <h3>ESTRUCTURA METALICA - ALINEAMIENTO Y ESTABILIDAD</h3>
+
+    <div class="question-row">
+        <label class="q-number">35.</label>
+        <label class="q-text">Presenta deformación visible sobre su eje vertical (mayor al 2%) (G73/I73):</label>
+        <select name="p_alineamiento_1" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
+        <select name="p_alineamiento_1_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <input type="text" name="p_alineamiento_1_comentario" placeholder="Comentario (K73)">
+    </div>
+
+    <div class="question-row">
+        <label class="q-number">36.</label>
+        <label class="q-text">Presenta movimiento perceptible en tope de torre (G74/I74):</label>
+        <select name="p_alineamiento_2" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
+        <select name="p_alineamiento_2_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <input type="text" name="p_alineamiento_2_comentario" placeholder="Comentario (K74)">
+    </div>
+
+    <div class="question-row">
+        <label class="q-number">37.</label>
+        <label class="q-text">Presenta tensión adecuada en vientos (G75/I75):</label>
+        <select name="p_alineamiento_3" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
+        <select name="p_alineamiento_3_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <input type="text" name="p_alineamiento_3_comentario" placeholder="Comentario (K75)">
+    </div>
+
+    <div class="question-row">
+        <label class="q-number">38.</label>
+        <label class="q-text">Presenta fijación adecuada de contravientos (G76/I76):</label>
+        <select name="p_alineamiento_4" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
+        <select name="p_alineamiento_4_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <input type="text" name="p_alineamiento_4_comentario" placeholder="Comentario (K76)">
+    </div>
+
+    <div class="question-row">
+        <label class="q-number">39.</label>
+        <label class="q-text">Línea de vida no presenta continuidad (G77/I77):</label>
+        <select name="p_alineamiento_5" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
+        <select name="p_alineamiento_5_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <input type="text" name="p_alineamiento_5_comentario" placeholder="Comentario (K77)">
+    </div>
+
+    <h3>ADICIONALES</h3>
+    
+    <div class="question-row">
+        <label class="q-number">40.</label>
+        <label class="q-text">Presenta empozamiento de agua (G79/I79):</label>
+        <select name="p_adicional_1" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
+        <select name="p_adicional_1_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <input type="text" name="p_adicional_1_comentario" placeholder="Comentario (K79)">
+    </div>
+
+    <div class="question-row">
+        <label class="q-number">41.</label>
+        <label class="q-text">Presenta filtraciones (G80/I80):</label>
+        <select name="p_adicional_2" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
+        <select name="p_adicional_2_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <input type="text" name="p_adicional_2_comentario" placeholder="Comentario (K80)">
+    </div>
+
+    <div class="question-row">
+        <label class="q-number">42.</label>
+        <label class="q-text">Falta de limpieza (G81/I81):</label>
+        <select name="p_adicional_3" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
+        <select name="p_adicional_3_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <input type="text" name="p_adicional_3_comentario" placeholder="Comentario (K81)">
+    </div>
+
+    <div class="question-row">
+        <label class="q-number">43.</label>
+        <label class="q-text">Acumulación de desperdicios (G82/I82):</label>
+        <select name="p_adicional_4" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
+        <select name="p_adicional_4_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <input type="text" name="p_adicional_4_comentario" placeholder="Comentario (K82)">
+    </div>
+
+    <div class="question-row">
+        <label class="q-number">44.</label>
+        <label class="q-text">Presenta crecimiento de vegetación (G83/I83):</label>
+        <select name="p_adicional_5" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
+        <select name="p_adicional_5_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <input type="text" name="p_adicional_5_comentario" placeholder="Comentario (K83)">
+    </div>
+
+    <div class="question-row">
+        <label class="q-number">45.</label>
+        <label class="q-text">Presenta acumulación de heces de aves (G84/I84):</label>
+        <select name="p_adicional_6" required><option value="NA">NA</option><option value="SI">SI</option><option value="NO">NO</option></select>
+        <select name="p_adicional_6_paralizacion"><option value="NO">NO</option><option value="SI">SI</option></select>
+        <input type="text" name="p_adicional_6_comentario" placeholder="Comentario (K84)">
+    </div>
+
+
     <hr>
     
     <h2>V. RESULTADO DE LA INSPECCIÓN</h2>
