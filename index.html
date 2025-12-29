@@ -116,38 +116,99 @@
     <div class="btn-nav"><button style="visibility:hidden">Anterior</button><button onclick="moveSlide(1)">Próximo</button></div>
 </div>
 
-            <!-- PARTE II: PROYECTO -->
-            <div class="slide">
-                <div class="section">
-                    <h2>II. DATOS DEL PROYECTO Y SITE</h2>
-                    <div class="grid-triple">
-                        <div><label>Nombre Site (E20):</label><input type="text" id="E20"></div>
-                        <div><label>Proyecto (L20):</label><input type="text" id="L20"></div>
-                        <div><label>Solución (T20):</label><input type="text" id="T20"></div>
-                    </div>
-                    <div class="grid-triple">
-                        <div><label>Prioridad (E21):</label><input type="text" id="E21"></div>
-                        <div><label>Act. Campo (L21):</label><input type="text" id="L21"></div>
-                        <div><label>MOP (T21):</label><input type="text" id="T21"></div>
-                    </div>
-                    <div class="grid-triple">
-                        <div><label>Dirección (E22):</label><input type="text" id="E22"></div>
-                        <div><label>Act. MOP (L22):</label><input type="text" id="L22"></div>
-                        <div><label>Contrato (T22):</label><input type="text" id="T22"></div>
-                    </div>
-                    <div class="grid">
-                        <div><label>Acceso Cont. (E23):</label><input type="text" id="E23"></div>
-                        <div><label>Comentarios (L23):</label><input type="text" id="L23"></div>
-                    </div>
-                    <div class="grid-triple">
-                        <div><label>Distrito (E24):</label><input type="text" id="E24"></div>
-                        <div><label>Tipo Sitio (L24):</label><input type="text" id="L24"></div>
-                        <div><label>Servicio (T24):</label><input type="text" id="T24"></div>
-                    </div>
-                </div>
-                <div class="btn-nav"><button onclick="moveSlide(-1)">Anterior</button><button onclick="moveSlide(1)">Próximo</button></div>
+           <!-- PARTE II: PROYECTO -->
+<div class="slide">
+    <div class="section">
+        <h2>II. DATOS DEL PROYECTO Y SITE</h2>
+        <div class="grid-triple">
+            <div>
+                <label>Nombre Site (E20):</label>
+                <input type="text" id="E20" list="listaSitiosHistoricos" oninput="vincularDatosSite(this.value)">
+                <datalist id="listaSitiosHistoricos"></datalist>
             </div>
+            <div><label>Proyecto (L20):</label><input type="text" id="L20"></div>
+            <div><label>Solución (T20):</label><input type="text" id="T20"></div>
+        </div>
+        <div class="grid-triple">
+            <div><label>Prioridad (E21):</label><input type="text" id="E21"></div>
+            <div><label>Act. Campo (L21):</label><input type="text" id="L21"></div>
+            <div><label>MOP (T21):</label><input type="text" id="T21"></div>
+        </div>
+        <div class="grid-triple">
+            <div><label>Dirección (E22):</label><input type="text" id="E22"></div>
+            <div><label>Act. MOP (L22):</label><input type="text" id="L22"></div>
+            <div><label>Contrato (T22):</label><input type="text" id="T22"></div>
+        </div>
+        <div class="grid">
+            <div><label>Acceso Cont. (E23):</label><input type="text" id="E23"></div>
+            <div><label>Comentarios (L23):</label><input type="text" id="L23"></div>
+        </div>
+        <div class="grid-triple">
+            <div>
+                <label>Distrito (E24): Departamento/Provincia/Distrito</label>
+                <input type="text" id="E24" list="listaUbigeoPeru" placeholder="Buscar: LIMA/LIMA/MIRAFLORES">
+                <datalist id="listaUbigeoPeru"></datalist>
+            </div>
+            <div><label>Tipo Sitio (L24):</label><input type="text" id="L24"></div>
+            <div><label>Servicio (T24):</label><input type="text" id="T24"></div>
+        </div>
+    </div>
+    
+    <script>
+        let sitiosHistoricos = [];
 
+        // 1. Cargar sitios desde MariaDB
+        async function cargarSitiosHistoricos() {
+            try {
+                const res = await fetch('https://backend-reportes-excel.onrender.com/sitios-frecuentes');
+                sitiosHistoricos = await res.json();
+                const dl = document.getElementById('listaSitiosHistoricos');
+                sitiosHistoricos.forEach(s => {
+                    let opt = document.createElement('option');
+                    opt.value = s.nombre_site;
+                    dl.appendChild(opt);
+                });
+            } catch (e) { console.log("Error cargando sitios"); }
+        }
+
+        // 2. Vincular y Autorellenar Proyecto, Dirección y Distrito
+        function vincularDatosSite(valor) {
+            const encontrado = sitiosHistoricos.find(s => s.nombre_site === valor);
+            if (encontrado) {
+                document.getElementById('L20').value = encontrado.proyecto || '';
+                document.getElementById('E22').value = encontrado.direccion || '';
+                document.getElementById('E24').value = encontrado.distrito || '';
+            }
+        }
+
+        // 3. Cargar Base de Datos de Ubigeo Perú (Simplificado para el ejemplo, pero funcional)
+        async function cargarUbigeoPeru() {
+            // Aquí consumimos un JSON con los 1,874 distritos del Perú
+            // Formato esperado: "DEPARTAMENTO/PROVINCIA/DISTRITO"
+            try {
+                const res = await fetch('https://raw.githubusercontent.com/joseluisq/ubigeo-peru/master/json/ubigeo_peru_2016_completo.json');
+                const data = await res.json();
+                const dlUbigeo = document.getElementById('listaUbigeoPeru');
+                
+                data.forEach(item => {
+                    let opt = document.createElement('option');
+                    // Construimos la cadena: DEP/PROV/DIST
+                    opt.value = `${item.departamento}/${item.provincia}/${item.distrito}`;
+                    dlUbigeo.appendChild(opt);
+                });
+            } catch (e) { console.log("Error cargando ubigeo"); }
+        }
+
+        // Inicializar al cargar el slide
+        cargarSitiosHistoricos();
+        cargarUbigeoPeru();
+    </script>
+
+    <div class="btn-nav">
+        <button onclick="moveSlide(-1)">Anterior</button>
+        <button onclick="moveSlide(1)">Próximo</button>
+    </div>
+</div>
             <!-- PARTE III: INSPECTOR -->
             <div class="slide">
                 <div class="section">
@@ -285,4 +346,5 @@
     </script>
 </body>
 </html>
+
 
