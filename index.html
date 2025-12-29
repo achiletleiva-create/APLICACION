@@ -53,49 +53,49 @@
         <div class="grid">
             <div>
                 <label>Razón Social (E11):</label>
-                <input type="text" id="E11" list="listaCooperadores" oninput="vincularRUC(this.value)" value="ENTEL PERU S.A.">
+                <!-- list="listaCooperadores" activa las sugerencias -->
+                <input type="text" id="E11" list="listaCooperadores" oninput="vincularRUC(this.value)" placeholder="Escriba o seleccione...">
                 <datalist id="listaCooperadores"></datalist>
             </div>
             <div>
                 <label>RUC (T11):</label>
-                <input type="text" id="T11" value="20106897914">
+                <input type="text" id="T11">
             </div>
         </div>
         <script>
-            // Array de Cooperadores obtenidos de la DB
-            let cooperadoresDB = [];
+            let baseDatosCooperadores = [];
 
-            // 1. Cargar Cooperadores al iniciar
-            async function cargarCooperadoresFrecuentes() {
+            // FUNCIÓN PARA CARGAR SUGERENCIAS DESDE LA DB
+            async function cargarCooperadores() {
                 try {
                     const res = await fetch('https://backend-reportes-excel.onrender.com/cooperadores-frecuentes');
-                    cooperadoresDB = await res.json();
-                    const list = document.getElementById('listaCooperadores');
-                    cooperadoresDB.forEach(c => {
-                        let opt = document.createElement('option');
-                        opt.value = c.razon_social;
-                        list.appendChild(opt);
+                    baseDatosCooperadores = await res.json();
+                    const datalist = document.getElementById('listaCooperadores');
+                    datalist.innerHTML = ''; // Limpiar
+                    baseDatosCooperadores.forEach(c => {
+                        let opcion = document.createElement('option');
+                        opcion.value = c.razon_social;
+                        datalist.appendChild(opcion);
                     });
-                } catch (e) { console.log("Error cargando cooperadores"); }
+                    console.log("Sugerencias cargadas:", baseDatosCooperadores.length);
+                } catch (e) { console.error("Error al cargar sugerencias"); }
             }
-            cargarCooperadoresFrecuentes();
 
-            // 2. Vincular RUC automáticamente al elegir Razón Social
+            // Ejecutar carga al abrir la app
+            cargarCooperadores();
+
+            // Vincular RUC automáticamente al elegir sugerencia
             function vincularRUC(valor) {
-                const encontrado = cooperadoresDB.find(c => c.razon_social === valor);
-                if (encontrado) {
-                    document.getElementById('T11').value = encontrado.ruc;
-                }
+                const match = baseDatosCooperadores.find(c => c.razon_social === valor);
+                if (match) document.getElementById('T11').value = match.ruc;
             }
 
-            // 3. Función de Auto-rellenado de Empresa (Condición: Solo tras Nombre)
-            function autoRellenarEmpresa(idPersona) {
-                const nombre = document.getElementById(`D${idPersona}`).value;
-                const razonSocial = document.getElementById('E11').value;
-                
-                // CONDICIÓN: Si hay nombre escrito, se auto-rellena la empresa
-                if (nombre.trim() !== "" && razonSocial.trim() !== "") {
-                    document.getElementById(`O${idPersona}`).value = razonSocial;
+            // Auto-relleno de Empresa (Solo si hay nombre escrito)
+            function rellenarEmpresa(id) {
+                const nombre = document.getElementById(`D${id}`).value;
+                const cooperador = document.getElementById('E11').value;
+                if (nombre.trim() !== "" && cooperador !== "") {
+                    document.getElementById(`O${id}`).value = cooperador;
                 }
             }
 
@@ -104,7 +104,7 @@
                 document.write(`
                     <label>PERSONAL 0${i+1}</label>
                     <div class="grid-quad">
-                        <input type="text" id="D${id}" placeholder="Nombre" onblur="autoRellenarEmpresa('${id}')">
+                        <input type="text" id="D${id}" placeholder="Nombre" onblur="rellenarEmpresa('${id}')">
                         <input type="text" id="H${id}" placeholder="Cargo">
                         <input type="text" id="O${id}" placeholder="Empresa">
                         <input type="text" id="T${id}" placeholder="DNI">
@@ -346,5 +346,6 @@
     </script>
 </body>
 </html>
+
 
 
