@@ -20,27 +20,22 @@
         .slide { display: none; animation: fadeIn 0.4s ease; }
         .slide.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        
         h2, h3 { color: #333; margin-bottom: 20px; text-align: center; border-bottom: 2px solid #eee; padding-bottom: 10px; }
         h4 { color: var(--secondary); margin: 15px 0 10px 0; font-size: 1rem; border-left: 4px solid var(--secondary); padding-left: 10px; }
-        
         .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 20px; }
-        .form-group { margin-bottom: 10px; }
         label { display: block; font-weight: bold; margin-bottom: 5px; color: #555; font-size: 0.85rem; }
         input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.9rem; }
-        
         .inspector-block { background: #f9f9f9; padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #eee; }
-        
         table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.8rem; }
         th, td { border: 1px solid #eee; padding: 8px; text-align: left; }
         th { background: #f8f9fa; color: #333; }
-        
         .buttons { display: flex; justify-content: space-between; margin-top: 30px; }
         button { padding: 12px 25px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
         .btn-prev { background: #e0e0e0; color: #333; }
         .btn-next { background: var(--primary); color: white; }
         .btn-export { background: var(--success); color: white; display: none; width: 100%; margin-top: 20px; font-size: 1.1rem; }
         button:hover { opacity: 0.9; transform: scale(1.01); }
+        button:disabled { background: #ccc; cursor: not-allowed; }
     </style>
 </head>
 <body>
@@ -52,11 +47,10 @@
         <div class="slide active">
             <h3><i class="fas fa-handshake"></i> Datos del Cooperador</h3>
             <div class="form-grid">
-                <div class="form-group"><label>Razón Social (E11)</label><input type="text" name="razon_social"></div>
-                <div class="form-group"><label>RUC (T11)</label><input type="text" name="ruc"></div>
+                <div><label>Razón Social (E11)</label><input type="text" name="razon_social"></div>
+                <div><label>RUC (T11)</label><input type="text" name="ruc"></div>
             </div>
-            
-            <h4>Personal en Campo (Personal 01 y 02)</h4>
+            <h4>Personal en Campo</h4>
             <div class="form-grid">
                 <div><label>P1 Nombre (D12)</label><input type="text" name="p1_nombre"></div>
                 <div><label>P1 Cargo (H12)</label><input type="text" name="p1_cargo"></div>
@@ -69,20 +63,6 @@
                 <div><label>P2 Empresa (Q13)</label><input type="text" name="p2_empresa"></div>
                 <div><label>P2 DNI (T13)</label><input type="text" name="p2_dni"></div>
             </div>
-
-            <h4>Personal en Campo (Personal 03 y 04)</h4>
-            <div class="form-grid">
-                <div><label>P3 Nombre (D14)</label><input type="text" name="p3_nombre"></div>
-                <div><label>P3 Cargo (H14)</label><input type="text" name="p3_cargo"></div>
-                <div><label>P3 Empresa (Q14)</label><input type="text" name="p3_empresa"></div>
-                <div><label>P3 DNI (T14)</label><input type="text" name="p3_dni"></div>
-            </div>
-            <div class="form-grid">
-                <div><label>P4 Nombre (D15)</label><input type="text" name="p4_nombre"></div>
-                <div><label>P4 Cargo (H15)</label><input type="text" name="p4_cargo"></div>
-                <div><label>P4 Empresa (Q15)</label><input type="text" name="p4_empresa"></div>
-                <div><label>P4 DNI (T15)</label><input type="text" name="p4_dni"></div>
-            </div>
         </div>
 
         <div class="slide">
@@ -93,30 +73,23 @@
                 <div><label>Solución (T20)</label><input type="text" name="solucion"></div>
             </div>
             <div class="form-grid">
-                <div><label>Prioridad (E21)</label><input type="text" name="prioridad"></div>
+                <div><label>Ubicación Geog. (E24)</label><input type="text" name="distrito" placeholder="Dep/Prov/Dist"></div>
                 <div><label>N. MOP (T21)</label><input type="text" name="n_mop"></div>
-                <div><label>Actividad Campo (L21)</label><input type="text" name="actividad_campo"></div>
-            </div>
-            <div class="form-grid">
                 <div><label>Dirección (E22)</label><input type="text" name="direccion"></div>
-                <div><label>Ubicación Geog. (E24)</label><input type="text" name="ubicacion_geografica"></div>
-                <div><label>N. Contrato (T22)</label><input type="text" name="n_contrato"></div>
             </div>
         </div>
 
         <div class="slide">
-            <h3><i class="fas fa-user-check"></i> Datos de los Inspectores</h3>
-            
+            <h3><i class="fas fa-user-check"></i> Datos del Inspector</h3>
             <div class="inspector-block">
                 <h4>Inspector 01</h4>
                 <div class="form-grid">
-                    <div><label>Nombre (D28)</label><input type="text" name="ins1_nombre"></div>
+                    <div><label>Nombre (D28)</label><input type="text" name="inspector_nombre"></div>
                     <div><label>Cargo (H28)</label><input type="text" name="ins1_cargo"></div>
                     <div><label>Empresa (O28)</label><input type="text" name="ins1_empresa"></div>
                     <div><label>DNI/CE (T28)</label><input type="text" name="ins1_dni"></div>
                 </div>
             </div>
-
             <div class="inspector-block">
                 <h4>Inspector 02</h4>
                 <div class="form-grid">
@@ -126,29 +99,18 @@
                     <div><label>DNI/CE (T29)</label><input type="text" name="ins2_dni"></div>
                 </div>
             </div>
-
             <div class="form-grid">
-                <div><label>Fecha Inicio (F30)</label><input type="date" name="fecha_inicio_supervision"></div>
-                <div><label>Fecha Fin (R30)</label><input type="date" name="fecha_fin_supervision"></div>
+                <div><label>Fecha Inicio (F30)</label><input type="date" name="fecha_inicio"></div>
+                <div><label>Fecha Fin (R30)</label><input type="date" name="fecha_fin"></div>
             </div>
         </div>
 
         <div class="slide">
-            <h3><i class="fas fa-clipboard-check"></i> Checklist Estructural (1-22)</h3>
+            <h3><i class="fas fa-list-ol"></i> Verificación Estructural</h3>
             <div style="overflow-x:auto;">
                 <table>
-                    <thead><tr><th>Ítem</th><th>Estado</th><th>Paraliza</th><th>Comentarios (K)</th></tr></thead>
-                    <tbody id="checklist-1"></tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="slide">
-            <h3><i class="fas fa-clipboard-check"></i> Checklist Estructural (23-45)</h3>
-            <div style="overflow-x:auto;">
-                <table>
-                    <thead><tr><th>Ítem</th><th>Estado</th><th>Paraliza</th><th>Comentarios (K)</th></tr></thead>
-                    <tbody id="checklist-2"></tbody>
+                    <thead><tr><th>Ítem</th><th>Estado</th><th>Paraliza</th><th>Obs</th></tr></thead>
+                    <tbody id="checklist-container"></tbody>
                 </table>
             </div>
             <button type="button" class="btn-export" id="btnExportar" onclick="generarExcel()">
@@ -182,46 +144,53 @@
     ];
 
     function initChecklist() {
-        const t1 = document.getElementById("checklist-1");
-        const t2 = document.getElementById("checklist-2");
+        const container = document.getElementById("checklist-container");
         preguntas.forEach((p, i) => {
-            const row = `<tr>
+            container.innerHTML += `<tr>
                 <td>${i+1}. ${p}</td>
                 <td><select name="p${i+1}_status"><option value="N/A">N/A</option><option value="SI">SI</option><option value="NO">NO</option></select></td>
                 <td><input type="checkbox" name="p${i+1}_paraliza" value="SI"></td>
-                <td><input type="text" name="p${i+1}_obs" placeholder="Observación"></td>
+                <td><input type="text" name="p${i+1}_obs" placeholder="..."></td>
             </tr>`;
-            if(i < 22) t1.innerHTML += row; else t2.innerHTML += row;
         });
     }
 
     function changeSlide(n) {
         slides[currentSlide].classList.remove("active");
         currentSlide += n;
-        
-        // Control de botones al llegar al final
-        if (currentSlide === slides.length - 1) {
-            btnNext.style.display = "none";
-            btnExport.style.display = "block";
-        } else {
-            btnNext.style.display = "block";
-            btnExport.style.display = "none";
-        }
-
-        if (currentSlide < 0) currentSlide = 0;
+        if (currentSlide === slides.length - 1) { btnNext.style.display = "none"; btnExport.style.display = "block"; }
+        else { btnNext.style.display = "block"; btnExport.style.display = "none"; }
         slides[currentSlide].classList.add("active");
     }
 
     async function generarExcel() {
+        const btn = document.getElementById("btnExportar");
+        btn.disabled = true;
+        btn.innerHTML = "PROCESANDO...";
         const formData = new FormData(document.getElementById("formReporte"));
-        const data = Object.fromEntries(formData.entries());
         
-        console.log("Enviando a MariaDB y Generando Excel...", data);
-        alert("Enviando datos al servidor Debian en 192.168.0.5... Generando Reporte Excel.");
-        
-        // Aquí irá tu fetch hacia el backend en Render/Bore
-    }
+        try {
+            const response = await fetch('https://backend-reportes-excel.onrender.com/generar-reporte', {
+                method: 'POST',
+                body: JSON.stringify(Object.fromEntries(formData.entries())),
+                headers: { 'Content-Type': 'application/json' }
+            });
 
+            if (!response.ok) throw new Error('Error en servidor');
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Reporte_${formData.get('nombre_site') || 'AENOR'}.xlsx`;
+            a.click();
+            alert("✅ Reporte guardado en Debian y Excel generado.");
+        } catch (err) {
+            alert("❌ Error: " + err.message);
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = "GENERAR REPORTE EN EXCEL";
+        }
+    }
     initChecklist();
 </script>
 </body>
