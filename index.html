@@ -47,30 +47,74 @@
             <h1>Reporte Técnico AENOR</h1>
 
             <!-- PARTE I: COOPERADOR -->
-            <div class="slide active">
-                <div class="section">
-                    <h2>I. DATOS DEL COOPERADOR</h2>
-                    <div class="grid">
-                        <div><label>Razón Social (E11):</label><input type="text" id="E11" value="ENTEL PERU S.A."></div>
-                        <div><label>RUC (T11):</label><input type="text" id="T11" value="20106897914"></div>
-                    </div>
-                    <script>
-                        const pers = [12, 13, 14, 15, 16];
-                        pers.forEach((id, i) => {
-                            document.write(`
-                                <label>PERSONAL 0${i+1}</label>
-                                <div class="grid-quad">
-                                    <input type="text" id="D${id}" placeholder="Nombre">
-                                    <input type="text" id="H${id}" placeholder="Cargo">
-                                    <input type="text" id="O${id}" placeholder="Empresa">
-                                    <input type="text" id="T${id}" placeholder="DNI">
-                                </div>
-                            `);
-                        });
-                    </script>
-                </div>
-                <div class="btn-nav"><button style="visibility:hidden">Anterior</button><button onclick="moveSlide(1)">Próximo</button></div>
+<div class="slide active">
+    <div class="section">
+        <h2>I. DATOS DEL COOPERADOR</h2>
+        <div class="grid">
+            <div>
+                <label>Razón Social (E11):</label>
+                <input type="text" id="E11" list="listaCooperadores" oninput="vincularRUC(this.value)" value="ENTEL PERU S.A.">
+                <datalist id="listaCooperadores"></datalist>
             </div>
+            <div>
+                <label>RUC (T11):</label>
+                <input type="text" id="T11" value="20106897914">
+            </div>
+        </div>
+        <script>
+            // Array de Cooperadores obtenidos de la DB
+            let cooperadoresDB = [];
+
+            // 1. Cargar Cooperadores al iniciar
+            async function cargarCooperadoresFrecuentes() {
+                try {
+                    const res = await fetch('https://backend-reportes-excel.onrender.com/cooperadores-frecuentes');
+                    cooperadoresDB = await res.json();
+                    const list = document.getElementById('listaCooperadores');
+                    cooperadoresDB.forEach(c => {
+                        let opt = document.createElement('option');
+                        opt.value = c.razon_social;
+                        list.appendChild(opt);
+                    });
+                } catch (e) { console.log("Error cargando cooperadores"); }
+            }
+            cargarCooperadoresFrecuentes();
+
+            // 2. Vincular RUC automáticamente al elegir Razón Social
+            function vincularRUC(valor) {
+                const encontrado = cooperadoresDB.find(c => c.razon_social === valor);
+                if (encontrado) {
+                    document.getElementById('T11').value = encontrado.ruc;
+                }
+            }
+
+            // 3. Función de Auto-rellenado de Empresa (Condición: Solo tras Nombre)
+            function autoRellenarEmpresa(idPersona) {
+                const nombre = document.getElementById(`D${idPersona}`).value;
+                const razonSocial = document.getElementById('E11').value;
+                
+                // CONDICIÓN: Si hay nombre escrito, se auto-rellena la empresa
+                if (nombre.trim() !== "" && razonSocial.trim() !== "") {
+                    document.getElementById(`O${idPersona}`).value = razonSocial;
+                }
+            }
+
+            const pers = [12, 13, 14, 15, 16];
+            pers.forEach((id, i) => {
+                document.write(`
+                    <label>PERSONAL 0${i+1}</label>
+                    <div class="grid-quad">
+                        <input type="text" id="D${id}" placeholder="Nombre" onblur="autoRellenarEmpresa('${id}')">
+                        <input type="text" id="H${id}" placeholder="Cargo">
+                        <input type="text" id="O${id}" placeholder="Empresa">
+                        <input type="text" id="T${id}" placeholder="DNI">
+                    </div>
+                `);
+            });
+        </script>
+    </div>
+    <div class="btn-nav"><button style="visibility:hidden">Anterior</button><button onclick="moveSlide(1)">Próximo</button></div>
+</div>
 
             <!-- PARTE II: PROYECTO -->
             <div class="slide">
@@ -241,3 +285,4 @@
     </script>
 </body>
 </html>
+
