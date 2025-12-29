@@ -3,253 +3,241 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reporte Técnico AENOR - Sistema Unificado</title>
+    <title>Reporte Técnico AENOR</title>
     <style>
-        :root { --primary: #005c97; --secondary: #363795; --success: #27ae60; --bg: #f4f7f6; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 20px; }
+        /* ESTILOS ORIGINALES DEL GIST */
+        body { font-family: Arial, sans-serif; background-color: #f4f4f9; margin: 0; padding: 20px; }
+        .container { max-width: 900px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #333; }
+        .slide { display: none; }
+        .slide.active { display: block; }
+        .section { margin-bottom: 20px; border: 1px solid #ccc; padding: 15px; border-radius: 5px; }
+        .section h2 { margin-top: 0; font-size: 18px; color: #005c97; border-bottom: 2px solid #005c97; padding-bottom: 5px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+        .grid-quad { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+        .grid-triple { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+        label { font-weight: bold; display: block; margin-bottom: 5px; font-size: 11px; }
+        input, select { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
         
-        /* Navegación por Pestañas */
-        .nav-tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 25px; }
-        .nav-tabs button { 
-            padding: 12px 25px; border: none; background: #ddd; cursor: pointer; 
-            border-radius: 8px; font-weight: bold; transition: 0.3s; font-size: 1rem;
-        }
-        .nav-tabs button.active { background: var(--primary); color: white; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-
-        .container { max-width: 1000px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        h1, h2 { color: var(--primary); text-align: center; }
+        /* DISEÑO PARTE IV: ORDEN ACTUALIZADO */
+        .checklist-item { display: grid; grid-template-columns: 2fr 0.8fr 1fr 1.5fr; gap: 8px; align-items: center; margin-bottom: 10px; padding-bottom: 5px; border-bottom: 1px solid #eee; font-size: 12px; }
         
-        /* Estilos del Formulario */
-        .bloque { border: 1px solid #e0e0e0; padding: 20px; border-radius: 10px; margin-bottom: 25px; background: #fafafa; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-        label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 0.9rem; color: #555; }
-        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        .btn-nav { display: flex; justify-content: space-between; margin-top: 20px; }
+        button { padding: 10px 20px; background-color: #005c97; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
         
-        /* Estilos del Checklist */
-        .check-item { display: grid; grid-template-columns: 1fr 100px 200px; gap: 10px; padding: 10px 0; border-bottom: 1px solid #eee; align-items: center; }
-        .btn-enviar { background: var(--primary); color: white; padding: 15px; border: none; width: 100%; border-radius: 8px; font-size: 1.1rem; cursor: pointer; margin-top: 20px; font-weight: bold; }
-        .btn-enviar:hover { background: var(--secondary); }
-
-        /* Estilos de la Tabla de Historial */
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 0.9rem; }
-        th { background: var(--primary); color: white; padding: 12px; text-align: left; }
-        td { padding: 12px; border-bottom: 1px solid #eee; }
-        tr:hover { background: #f9f9f9; }
-        .btn-descarga { background: var(--success); color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; text-decoration: none; font-size: 0.8rem; }
-        
-        #loadingOverlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.8); z-index:1000; flex-direction:column; justify-content:center; align-items:center; }
+        /* ESTILOS PESTAÑAS */
+        .nav-tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
+        .nav-tabs button { background: #ddd; color: #333; }
+        .nav-tabs button.active { background: #005c97; color: white; }
+        #tablaHistorial { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 12px; }
+        #tablaHistorial th, #tablaHistorial td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        #tablaHistorial th { background: #005c97; color: white; }
     </style>
 </head>
 <body>
 
-    <div id="loadingOverlay">
-        <div style="border: 5px solid #f3f3f3; border-top: 5px solid var(--primary); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite;"></div>
-        <p>Procesando información...</p>
-    </div>
-
     <div class="nav-tabs">
-        <button onclick="cambiarPestaña('formulario')" id="tab-form" class="active">📝 Nuevo Reporte</button>
-        <button onclick="cambiarPestaña('historial')" id="tab-hist">📋 Historial de Inspecciones</button>
+        <button onclick="cambiarSeccion('app')" id="tab-app" class="active">📝 NUEVO REPORTE</button>
+        <button onclick="cambiarSeccion('hist')" id="tab-hist">📋 VER HISTORIAL</button>
     </div>
 
     <div class="container">
-        <!-- SECCIÓN 1: FORMULARIO -->
-        <div id="seccion-formulario">
+        
+        <div id="seccion-app">
             <h1>Reporte Técnico AENOR</h1>
-            
-            <!-- BLOQUE 1: COOPERADOR -->
-            <div class="bloque">
-                <h2>I. Datos del Cooperador</h2>
-                <div class="grid">
-                    <div><label>Razón Social (E11)</label><input type="text" id="E11" value="ENTEL PERU S.A."></div>
-                    <div><label>RUC (T11)</label><input type="text" id="T11" value="20106897914"></div>
+
+            <!-- PARTE I: COOPERADOR -->
+            <div class="slide active">
+                <div class="section">
+                    <h2>I. DATOS DEL COOPERADOR</h2>
+                    <div class="grid">
+                        <div><label>Razón Social (E11):</label><input type="text" id="E11" value="ENTEL PERU S.A."></div>
+                        <div><label>RUC (T11):</label><input type="text" id="T11" value="20106897914"></div>
+                    </div>
+                    <script>
+                        const pers = [12, 13, 14, 15, 16];
+                        pers.forEach((id, i) => {
+                            document.write(`
+                                <label>PERSONAL 0${i+1}</label>
+                                <div class="grid-quad">
+                                    <input type="text" id="D${id}" placeholder="Nombre">
+                                    <input type="text" id="H${id}" placeholder="Cargo">
+                                    <input type="text" id="O${id}" placeholder="Empresa">
+                                    <input type="text" id="T${id}" placeholder="DNI">
+                                </div>
+                            `);
+                        });
+                    </script>
                 </div>
-                <div class="grid" style="margin-top:15px">
-                    <div><label>Personal 01 (D12)</label><input type="text" id="D12"></div>
-                    <div><label>DNI/CE (T12)</label><input type="text" id="T12"></div>
-                </div>
+                <div class="btn-nav"><button style="visibility:hidden">Anterior</button><button onclick="moveSlide(1)">Próximo</button></div>
             </div>
 
-            <!-- BLOQUE 2: PROYECTO Y SITE -->
-            <div class="bloque">
-                <h2>II. Datos del Proyecto y Site</h2>
-                <div class="grid">
-                    <div><label>Nombre Site (E20)</label><input type="text" id="E20" placeholder="Ej: LIM-123"></div>
-                    <div><label>Proyecto (L20)</label><input type="text" id="L20"></div>
-                    <div><label>Solución (T20)</label><input type="text" id="T20"></div>
+            <!-- PARTE II: PROYECTO -->
+            <div class="slide">
+                <div class="section">
+                    <h2>II. DATOS DEL PROYECTO Y SITE</h2>
+                    <div class="grid-triple">
+                        <div><label>Nombre Site (E20):</label><input type="text" id="E20"></div>
+                        <div><label>Proyecto (L20):</label><input type="text" id="L20"></div>
+                        <div><label>Solución (T20):</label><input type="text" id="T20"></div>
+                    </div>
+                    <div class="grid-triple">
+                        <div><label>Prioridad (E21):</label><input type="text" id="E21"></div>
+                        <div><label>Act. Campo (L21):</label><input type="text" id="L21"></div>
+                        <div><label>MOP (T21):</label><input type="text" id="T21"></div>
+                    </div>
+                    <div class="grid-triple">
+                        <div><label>Dirección (E22):</label><input type="text" id="E22"></div>
+                        <div><label>Act. MOP (L22):</label><input type="text" id="L22"></div>
+                        <div><label>Contrato (T22):</label><input type="text" id="T22"></div>
+                    </div>
+                    <div class="grid">
+                        <div><label>Acceso Cont. (E23):</label><input type="text" id="E23"></div>
+                        <div><label>Comentarios (L23):</label><input type="text" id="L23"></div>
+                    </div>
+                    <div class="grid-triple">
+                        <div><label>Distrito (E24):</label><input type="text" id="E24"></div>
+                        <div><label>Tipo Sitio (L24):</label><input type="text" id="L24"></div>
+                        <div><label>Servicio (T24):</label><input type="text" id="T24"></div>
+                    </div>
                 </div>
-                <div class="grid" style="margin-top:10px">
-                    <div><label>Prioridad (E21)</label><input type="text" id="E21"></div>
-                    <div><label>Distrito (E24)</label><input type="text" id="E24"></div>
-                    <div><label>Servicio (T24)</label><input type="text" id="T24"></div>
-                </div>
+                <div class="btn-nav"><button onclick="moveSlide(-1)">Anterior</button><button onclick="moveSlide(1)">Próximo</button></div>
             </div>
 
-            <!-- BLOQUE 3: INSPECTOR -->
-            <div class="bloque">
-                <h2>III. Datos del Inspector</h2>
-                <div class="grid">
-                    <div><label>Nombre Inspector (D28)</label><input type="text" id="D28"></div>
-                    <div><label>DNI (T28)</label><input type="text" id="T28"></div>
-                    <div><label>Fecha Inicio (F30)</label><input type="date" id="F30"></div>
+            <!-- PARTE III: INSPECTOR -->
+            <div class="slide">
+                <div class="section">
+                    <h2>III. DATOS DEL INSPECTOR</h2>
+                    <label>INSPECTOR 01</label>
+                    <div class="grid-quad">
+                        <input type="text" id="D28" placeholder="Nombre">
+                        <input type="text" id="H28" placeholder="Cargo">
+                        <input type="text" id="O28" placeholder="Empresa">
+                        <input type="text" id="T28" placeholder="DNI">
+                    </div>
+                    <label>INSPECTOR 02</label>
+                    <div class="grid-quad">
+                        <input type="text" id="D29" placeholder="Nombre">
+                        <input type="text" id="H29" placeholder="Cargo">
+                        <input type="text" id="O29" placeholder="Empresa">
+                        <input type="text" id="T29" placeholder="DNI">
+                    </div>
+                    <div class="grid">
+                        <div><label>Fecha Inicio (F30):</label><input type="date" id="F30"></div>
+                        <div><label>Fecha Fin (R30):</label><input type="date" id="R30"></div>
+                    </div>
                 </div>
+                <div class="btn-nav"><button onclick="moveSlide(-1)">Anterior</button><button onclick="moveSlide(1)">Próximo</button></div>
             </div>
 
-            <!-- BLOQUE 4: CHECKLIST -->
-            <div class="bloque">
-                <h2>IV. Verificación de Estructura</h2>
-                <div id="contenedorChecklist">
-                    <!-- Generado por JS -->
+            <!-- PARTE IV: CHECKLIST (ORDEN MODIFICADO SEGÚN SOLICITUD) -->
+            <div class="slide">
+                <div class="section">
+                    <h2>IV. PREGUNTAS DE VERIFICACIÓN</h2>
+                    <div id="checklist-container"></div>
                 </div>
+                <div class="btn-nav"><button onclick="moveSlide(-1)">Anterior</button><button onclick="enviarDatos()" style="background:#27ae60">GENERAR EXCEL</button></div>
             </div>
-
-            <button class="btn-enviar" onclick="enviarDatos()">🚀 Generar y Guardar Reporte</button>
         </div>
 
-        <!-- SECCIÓN 2: HISTORIAL -->
+        <!-- SECCIÓN HISTORIAL -->
         <div id="seccion-historial" style="display:none;">
-            <h2>📋 Historial de Reportes Guardados</h2>
-            <p style="text-align:center; color: #666;">Registros almacenados en el servidor Debian via Render</p>
+            <h2>📋 Historial de Reportes</h2>
             <table id="tablaHistorial">
                 <thead>
-                    <tr>
-                        <th>Fecha Registro</th>
-                        <th>Nombre Site</th>
-                        <th>Proyecto</th>
-                        <th>Inspector</th>
-                        <th>Acción</th>
-                    </tr>
+                    <tr><th>Fecha</th><th>Site</th><th>Proyecto</th><th>Inspector</th><th>Acción</th></tr>
                 </thead>
-                <tbody>
-                    <!-- Se llena dinámicamente -->
-                </tbody>
+                <tbody></tbody>
             </table>
         </div>
+
     </div>
 
     <script>
-        const BACKEND_URL = "https://backend-reportes-excel.onrender.com";
-
-        // 1. GESTIÓN DE PESTAÑAS
-        function cambiarPestaña(pestaña) {
-            if (pestaña === 'formulario') {
-                document.getElementById('seccion-formulario').style.display = 'block';
-                document.getElementById('seccion-historial').style.display = 'none';
-                document.getElementById('tab-form').classList.add('active');
-                document.getElementById('tab-hist').classList.remove('active');
-            } else {
-                document.getElementById('seccion-formulario').style.display = 'none';
-                document.getElementById('seccion-historial').style.display = 'block';
-                document.getElementById('tab-form').classList.remove('active');
-                document.getElementById('tab-hist').classList.add('active');
-                cargarHistorial();
-            }
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        function moveSlide(step) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide += step;
+            slides[currentSlide].classList.add('active');
+            window.scrollTo(0,0);
         }
 
-        // 2. GENERACIÓN DINÁMICA DEL CHECKLIST (45 items)
-        const checklistItems = [
-            "Existencia de planos", "Certificado de verticalidad", "Estado de pintura", 
-            "Ajuste de pernería", "Estado de escalerilla", "Soportes de antenas",
-            "Línea de vida", "Sistema de puesta a tierra", "Limpieza de área"
-            // Puedes añadir los 45 nombres aquí o dejarlo como Item 1, 2...
+        const preguntas = [
+            "Existencia de planos As-Built", "Verticalidad de estructura", "Torque de pernería estructural",
+            "Pintura de balizaje", "Limpieza y desbroce", "Estado de cimentación", "Línea de vida", "Escalera de ascenso", 
+            "Plataformas", "Soportes de antenas", "Bandejas porta cables", "Puesta a tierra", "Luces obstrucción", 
+            "Pararrayos", "Mimetizado", "Cerco perimétrico", "Puerta de acceso", "Letreros", "Pernos anclaje", 
+            "Nivelación perfiles", "Oxidación", "Galvanizado", "Pernos seguridad", "Abrazaderas", "Conectores tierra", 
+            "Bajantes tierra", "Pozo a tierra", "Pintura base", "Fisuras concreto", "Drenajes", "Roxtec", 
+            "Cableado RF", "Cableado Energía", "Etiquetado", "Ordenamiento", "Prot. Lluvia", "Gabinetes", 
+            "Ventilación", "Alarmas", "Prot. Aves", "Cerraduras", "Iluminación", "Extintor", "Botiquín", "Limpieza"
         ];
 
-        const contenedor = document.getElementById('contenedorChecklist');
-        for (let i = 1; i <= 45; i++) {
+        const container = document.getElementById('checklist-container');
+        preguntas.forEach((p, i) => {
+            const n = i + 1;
             const div = document.createElement('div');
-            div.className = 'check-item';
+            div.className = 'checklist-item';
             div.innerHTML = `
-                <span>${i}. ${checklistItems[i-1] || 'Punto de inspección ' + i}</span>
-                <select id="I_P${i}"><option value="SI">SI</option><option value="NO">NO</option><option value="N/A">N/A</option></select>
-                <input type="text" id="K_P${i}" placeholder="Observaciones (Celda K)">
+                <span>${n}. ${p}</span>
+                <select id="I_P${n}"><option value="SI">SI</option><option value="NO">NO</option><option value="N/A">N/A</option></select>
+                <select id="G_P${n}"><option value="NO">NO PARAL.</option><option value="SI">SI PARAL.</option></select>
+                <input type="text" id="K_P${n}" placeholder="Comentarios">
             `;
-            contenedor.appendChild(div);
+            container.appendChild(div);
+        });
+
+        function cambiarSeccion(t) {
+            document.getElementById('seccion-app').style.display = (t === 'app' ? 'block' : 'none');
+            document.getElementById('seccion-historial').style.display = (t === 'hist' ? 'block' : 'none');
+            document.getElementById('tab-app').classList.toggle('active', t === 'app');
+            document.getElementById('tab-hist').classList.toggle('active', t === 'hist');
+            if(t === 'hist') cargarHistorial();
         }
 
-        // 3. ENVIAR DATOS AL BACKEND
         async function enviarDatos() {
-            const loader = document.getElementById('loadingOverlay');
-            loader.style.display = 'flex';
-
             const data = {};
-            // Captura de campos directos
-            const campos = ['E11','T11','D12','T12','E20','L20','T20','E21','E24','T24','D28','T28','F30'];
-            campos.forEach(id => { data[id] = document.getElementById(id).value; });
-
-            // Captura de checklist
-            for (let i = 1; i <= 45; i++) {
+            const ids = ["E11","T11","D12","H12","O12","T12","D13","H13","O13","T13","D14","H14","O14","T14","D15","H15","O15","T15","D16","H16","O16","T16","E20","L20","T20","E21","L21","T21","E22","L22","T22","E23","L23","E24","L24","T24","D28","H28","O28","T28","D29","H29","O29","T29","F30","R30"];
+            ids.forEach(id => { data[id] = document.getElementById(id).value; });
+            for(let i=1; i<=45; i++) {
+                data[`G_P${i}`] = document.getElementById(`G_P${i}`).value;
                 data[`I_P${i}`] = document.getElementById(`I_P${i}`).value;
                 data[`K_P${i}`] = document.getElementById(`K_P${i}`).value;
-                data[`G_P${i}`] = "Referencia"; // Valor por defecto para columna G
             }
 
             try {
-                const response = await fetch(`${BACKEND_URL}/generar-reporte`, {
+                const res = await fetch('https://backend-reportes-excel.onrender.com/generar-reporte', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify(data)
                 });
-
-                if (response.ok) {
-                    const blob = await response.blob();
-                    const url = window.URL.createObjectURL(blob);
+                if(res.ok) {
+                    const b = await res.blob();
                     const a = document.createElement('a');
-                    a.href = url;
-                    a.download = `Reporte_${data.E20 || 'Final'}.xlsx`;
-                    document.body.appendChild(a);
+                    a.href = window.URL.createObjectURL(b);
+                    a.download = `Reporte_${data.E20}.xlsx`;
                     a.click();
-                    alert("✅ Reporte generado y guardado en historial.");
-                } else {
-                    alert("❌ Error en el servidor.");
                 }
-            } catch (error) {
-                alert("❌ Error de conexión: " + error.message);
-            } finally {
-                loader.style.display = 'none';
-            }
+            } catch(e) { alert("Error de servidor"); }
         }
 
-        // 4. CARGAR HISTORIAL DESDE LA DB
         async function cargarHistorial() {
             const tbody = document.querySelector('#tablaHistorial tbody');
-            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center">Conectando con Debian...</td></tr>';
-
+            tbody.innerHTML = '<tr><td colspan="5">Cargando...</td></tr>';
             try {
-                const response = await fetch(`${BACKEND_URL}/historial-datos`);
-                const datos = await response.json();
+                const res = await fetch('https://backend-reportes-excel.onrender.com/historial-datos');
+                const datos = await res.json();
                 tbody.innerHTML = '';
-
-                if (datos.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center">No hay registros aún.</td></tr>';
-                    return;
-                }
-
-                datos.forEach(reg => {
-                    const fecha = new Date(reg.fecha_registro).toLocaleString('es-PE');
-                    tbody.innerHTML += `
-                        <tr>
-                            <td>${fecha}</td>
-                            <td>${reg.nombre_site || 'N/A'}</td>
-                            <td>${reg.proyecto || 'N/A'}</td>
-                            <td>${reg.inspector_nombre || 'N/A'}</td>
-                            <td>
-                                <button onclick="descargarCopia(${reg.id})" class="btn-descarga">📥 Excel</button>
-                            </td>
-                        </tr>`;
+                datos.forEach(r => {
+                    tbody.innerHTML += `<tr>
+                        <td>${new Date(r.fecha_registro).toLocaleString()}</td>
+                        <td>${r.nombre_site}</td><td>${r.proyecto}</td><td>${r.inspector_nombre}</td>
+                        <td><button onclick="window.location.href='https://backend-reportes-excel.onrender.com/regenerar-excel/${r.id}'" style="background:#27ae60; padding:5px;">📥</button></td>
+                    </tr>`;
                 });
-            } catch (error) {
-                tbody.innerHTML = `<tr><td colspan="5" style="color:red; text-align:center">⚠️ Error: ${error.message}</td></tr>`;
-            }
+            } catch(e) { tbody.innerHTML = '<td>Error</td>'; }
         }
-
-        function descargarCopia(id) {
-            window.location.href = `${BACKEND_URL}/regenerar-excel/${id}`;
-        }
-
-        // Estilo de animación para el loader
-        const style = document.createElement('style');
-        style.innerHTML = `@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }`;
-        document.head.appendChild(style);
     </script>
 </body>
 </html>
