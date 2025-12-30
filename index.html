@@ -4,293 +4,308 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reporte Técnico AENOR</title>
+    <!-- FontAwesome para Iconos Modernos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
-        /* ESTILOS ORIGINALES DEL GIST */
-        body { font-family: Arial, sans-serif; background-color: #f4f4f9; margin: 0; padding: 20px; }
-        .container { max-width: 900px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h1 { text-align: center; color: #333; }
+        :root {
+            --morado-principal: #6a11cb;
+            --morado-difuminado: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            --fondo-gradiente: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
+        }
+
+        body { 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+            background-attachment: fixed;
+            margin: 0; padding: 20px; 
+        }
+
+        /* Contenedor Moderno */
+        .container { 
+            max-width: 900px; margin: auto; background: rgba(255, 255, 255, 0.95); 
+            padding: 30px; border-radius: 20px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        h1 { text-align: center; color: var(--morado-principal); font-weight: 700; }
+
+        /* Carátula */
+        .caratula { text-align: center; padding: 60px 20px; }
+        .caratula i { font-size: 80px; color: var(--morado-principal); margin-bottom: 20px; }
+        .caratula h1 { font-size: 42px; margin: 0; }
+        .caratula p { font-size: 18px; color: #555; font-style: italic; }
+
+        /* Navegación Pestañas */
+        .nav-tabs { display: flex; justify-content: center; gap: 15px; margin-bottom: 25px; }
+        .nav-tabs button { 
+            background: white; color: var(--morado-principal); border: 2px solid var(--morado-principal); 
+            padding: 10px 25px; border-radius: 50px; font-weight: bold; cursor: pointer; transition: 0.3s;
+        }
+        .nav-tabs button.active { background: var(--morado-difuminado); color: white; border: none; }
+
+        /* Slides y Secciones */
         .slide { display: none; }
         .slide.active { display: block; }
-        .section { margin-bottom: 20px; border: 1px solid #ccc; padding: 15px; border-radius: 5px; }
-        .section h2 { margin-top: 0; font-size: 18px; color: #005c97; border-bottom: 2px solid #005c97; padding-bottom: 5px; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+        .section { 
+            margin-bottom: 20px; border-radius: 15px; background: #fff; padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-left: 6px solid var(--morado-principal);
+        }
+        .section h2 { margin-top: 0; font-size: 18px; color: var(--morado-principal); display: flex; align-items: center; gap: 10px; }
+        
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
         .grid-quad { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-        .grid-triple { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-        label { font-weight: bold; display: block; margin-bottom: 5px; font-size: 11px; }
-        input, select { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        
-        /* DISEÑO PARTE IV: ORDEN ACTUALIZADO */
-        .checklist-item { display: grid; grid-template-columns: 2fr 0.8fr 1fr 1.5fr; gap: 8px; align-items: center; margin-bottom: 10px; padding-bottom: 5px; border-bottom: 1px solid #eee; font-size: 12px; }
-        
+        .grid-triple { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+
+        label { font-weight: 600; display: block; margin-bottom: 5px; font-size: 12px; color: #666; }
+        input, select { 
+            width: 100%; padding: 10px; border: 1.5px solid #ddd; border-radius: 8px; 
+            box-sizing: border-box; transition: 0.3s;
+        }
+        input:focus { border-color: var(--morado-principal); outline: none; box-shadow: 0 0 8px rgba(106,17,203,0.2); }
+
+        /* Checklist Parte IV: ORDEN PEDIDO */
+        .checklist-item { 
+            display: grid; grid-template-columns: 2.5fr 0.8fr 1fr 1.5fr; gap: 10px; 
+            align-items: center; margin-bottom: 10px; padding: 10px; border-radius: 10px; background: #f9f9ff;
+        }
+
+        /* Botones */
         .btn-nav { display: flex; justify-content: space-between; margin-top: 20px; }
-        button { padding: 10px 20px; background-color: #005c97; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        
-        /* ESTILOS PESTAÑAS */
-        .nav-tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
-        .nav-tabs button { background: #ddd; color: #333; }
-        .nav-tabs button.active { background: #005c97; color: white; }
-        #tablaHistorial { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 12px; }
-        #tablaHistorial th, #tablaHistorial td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        #tablaHistorial th { background: #005c97; color: white; }
+        button.action { 
+            padding: 12px 30px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; transition: 0.3s;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .btn-prev { background: #eee; color: #555; }
+        .btn-next { background: var(--morado-difuminado); color: white; }
+        .btn-gen { background: #27ae60; color: white; width: 100%; justify-content: center; font-size: 18px; }
+
+        /* Feedback Status */
+        #gen-status { text-align: center; font-size: 13px; margin-top: 10px; font-weight: bold; }
+        .loading { color: #f39c12; }
+        .success { color: #27ae60; }
+
+        /* Historial */
+        #tablaHistorial { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        #tablaHistorial th { background: var(--morado-difuminado); color: white; padding: 12px; border-radius: 5px 5px 0 0; }
+        #tablaHistorial td { padding: 12px; border-bottom: 1px solid #eee; }
     </style>
 </head>
 <body>
 
     <div class="nav-tabs">
-        <button onclick="cambiarSeccion('app')" id="tab-app" class="active">📝 NUEVO REPORTE</button>
-        <button onclick="cambiarSeccion('hist')" id="tab-hist">📋 VER HISTORIAL</button>
+        <button onclick="cambiarSeccion('app')" id="tab-app" class="active"><i class="fa-solid fa-file-pen"></i> NUEVO REPORTE</button>
+        <button onclick="cambiarSeccion('hist')" id="tab-hist"><i class="fa-solid fa-clock-rotate-left"></i> VER HISTORIAL</button>
     </div>
 
     <div class="container">
         
         <div id="seccion-app">
-            <h1>Reporte Técnico AENOR</h1>
-
-            <!-- PARTE I: COOPERADOR -->
-<div class="slide active">
-    <div class="section">
-        <h2>I. DATOS DEL COOPERADOR</h2>
-        <div class="grid">
-            <div>
-                <label>Razón Social (E11):</label>
-                <!-- list="listaCooperadores" activa las sugerencias -->
-                <input type="text" id="E11" list="listaCooperadores" oninput="vincularRUC(this.value)" placeholder="Escriba o seleccione...">
-                <datalist id="listaCooperadores"></datalist>
-            </div>
-            <div>
-                <label>RUC (T11):</label>
-                <input type="text" id="T11">
-            </div>
-        </div>
-        <script>
-            let baseDatosCooperadores = [];
-
-            // FUNCIÓN PARA CARGAR SUGERENCIAS DESDE LA DB
-            async function cargarCooperadores() {
-                try {
-                    const res = await fetch('https://backend-reportes-excel.onrender.com/cooperadores-frecuentes');
-                    baseDatosCooperadores = await res.json();
-                    const datalist = document.getElementById('listaCooperadores');
-                    datalist.innerHTML = ''; // Limpiar
-                    baseDatosCooperadores.forEach(c => {
-                        let opcion = document.createElement('option');
-                        opcion.value = c.razon_social;
-                        datalist.appendChild(opcion);
-                    });
-                    console.log("Sugerencias cargadas:", baseDatosCooperadores.length);
-                } catch (e) { console.error("Error al cargar sugerencias"); }
-            }
-
-            // Ejecutar carga al abrir la app
-            cargarCooperadores();
-
-            // Vincular RUC automáticamente al elegir sugerencia
-            function vincularRUC(valor) {
-                const match = baseDatosCooperadores.find(c => c.razon_social === valor);
-                if (match) document.getElementById('T11').value = match.ruc;
-            }
-
-            // Auto-relleno de Empresa (Solo si hay nombre escrito)
-            function rellenarEmpresa(id) {
-                const nombre = document.getElementById(`D${id}`).value;
-                const cooperador = document.getElementById('E11').value;
-                if (nombre.trim() !== "" && cooperador !== "") {
-                    document.getElementById(`O${id}`).value = cooperador;
-                }
-            }
-
-            const pers = [12, 13, 14, 15, 16];
-            pers.forEach((id, i) => {
-                document.write(`
-                    <label>PERSONAL 0${i+1}</label>
-                    <div class="grid-quad">
-                        <input type="text" id="D${id}" placeholder="Nombre" onblur="rellenarEmpresa('${id}')">
-                        <input type="text" id="H${id}" placeholder="Cargo">
-                        <input type="text" id="O${id}" placeholder="Empresa">
-                        <input type="text" id="T${id}" placeholder="DNI">
-                    </div>
-                `);
-            });
-        </script>
-    </div>
-    <div class="btn-nav"><button style="visibility:hidden">Anterior</button><button onclick="moveSlide(1)">Próximo</button></div>
-</div>
-
-         <!-- PARTE II: PROYECTO -->
-<div class="slide">
-    <div class="section">
-        <h2>II. DATOS DEL PROYECTO Y SITE</h2>
-        <div class="grid-triple">
-            <div>
-                <label>Nombre Site (E20):</label>
-                <input type="text" id="E20" list="listaSitios" oninput="validarCambioSite(this.value)" placeholder="Escriba nombre del site...">
-                <datalist id="listaSitios"></datalist>
-            </div>
-            <div><label>Proyecto (L20):</label><input type="text" id="L20"></div>
-            <div><label>Solución (T20):</label><input type="text" id="T20"></div>
-        </div>
-        <div class="grid-triple" style="margin-top:10px;">
-            <div><label>Prioridad (E21):</label><input type="text" id="E21"></div>
-            <div><label>Act. Campo (L21):</label><input type="text" id="L21"></div>
-            <div><label>MOP (T21):</label><input type="text" id="T21"></div>
-        </div>
-        <div class="grid-triple" style="margin-top:10px;">
-            <div><label>Dirección (E22):</label><input type="text" id="E22"></div>
-            <div><label>Act. MOP (L22):</label><input type="text" id="L22"></div>
-            <div><label>Contrato (T22):</label><input type="text" id="T22"></div>
-        </div>
-        <div class="grid" style="margin-top:10px;">
-            <div><label>Acceso Cont. (E23):</label><input type="text" id="E23"></div>
-            <div><label>Comentarios (L23):</label><input type="text" id="L23"></div>
-        </div>
-        <div class="grid-triple" style="margin-top:10px;">
-            <div>
-                <label>Distrito (E24): Departamento / Provincia / Distrito</label>
-                <input type="text" id="E24" list="listaUbigeo" placeholder="Elegir ubicación...">
-                <datalist id="listaUbigeo"></datalist>
-            </div>
-            <div><label>Tipo Sitio (L24):</label><input type="text" id="L24"></div>
-            <div><label>Servicio (T24):</label><input type="text" id="T24"></div>
-        </div>
-    </div>
-    <script>
-        let memoriaSitios = [];
-
-        async function inicializarParteII() {
-            try {
-                // 1. Cargar Sitios (El servidor ya los envía únicos y recientes)
-                const resSitios = await fetch('https://backend-reportes-excel.onrender.com/sitios-historicos');
-                memoriaSitios = await resSitios.json();
-                const dlSitios = document.getElementById('listaSitios');
-                dlSitios.innerHTML = ''; 
-                memoriaSitios.forEach(s => {
-                    let opt = document.createElement('option');
-                    opt.value = s.nombre_site;
-                    dlSitios.appendChild(opt);
-                });
-
-                // 2. Cargar Ubigeo
-                const resUbigeo = await fetch('https://backend-reportes-excel.onrender.com/ubigeo-lista');
-                const ubigeoData = await resUbigeo.json();
-                const dlUbigeo = document.getElementById('listaUbigeo');
-                dlUbigeo.innerHTML = '';
-                ubigeoData.forEach(u => {
-                    let opt = document.createElement('option');
-                    opt.value = `${u.departamento} / ${u.provincia} / ${u.distrito}`;
-                    dlUbigeo.appendChild(opt);
-                });
-            } catch (e) { console.error("Error al cargar datos"); }
-        }
-
-        inicializarParteII();
-
-        // Nueva lógica: Se dispara al escribir. Si coincide EXACTAMENTE, rellena.
-        // Esto permite que si borras o cambias algo manualmente, el sistema te deje.
-        function validarCambioSite(valor) {
-            const encontrado = memoriaSitios.find(s => s.nombre_site === valor);
-            if (encontrado) {
-                document.getElementById('L20').value = encontrado.proyecto || '';
-                document.getElementById('E22').value = encontrado.direccion || '';
-                document.getElementById('E24').value = encontrado.distrito || '';
-                document.getElementById('L24').value = encontrado.tipo_sitio || '';
-                console.log("Datos recuperados del último registro.");
-            }
-        }
-    </script>
-    <div class="btn-nav">
-        <button onclick="moveSlide(-1)">Anterior</button>
-        <button onclick="moveSlide(1)">Próximo</button>
-    </div>
-</div>
-           <!-- PARTE III: INSPECTOR -->
-<div class="slide">
-    <div class="section">
-        <h2>III. DATOS DEL INSPECTOR</h2>
-        
-        <label>INSPECTOR 01</label>
-        <div class="grid-quad">
-            <input type="text" id="D28" list="listaInspectores" onblur="autoRellenarInspector('28')" placeholder="Nombre">
-            <input type="text" id="H28" placeholder="Cargo">
-            <input type="text" id="O28" placeholder="Empresa">
-            <input type="text" id="T28" placeholder="DNI">
-        </div>
-
-        <label>INSPECTOR 02</label>
-        <div class="grid-quad">
-            <input type="text" id="D29" list="listaInspectores" onblur="autoRellenarInspector('29')" placeholder="Nombre">
-            <input type="text" id="H29" placeholder="Cargo">
-            <input type="text" id="O29" placeholder="Empresa">
-            <input type="text" id="T29" placeholder="DNI">
-        </div>
-
-        <datalist id="listaInspectores"></datalist>
-
-        <div class="grid">
-            <div><label>Fecha Inicio (F30):</label><input type="date" id="F30"></div>
-            <div><label>Fecha Fin (R30):</label><input type="date" id="R30"></div>
-        </div>
-    </div>
-    
-    <script>
-        let memoriaInspectores = [];
-
-        async function inicializarParteIII() {
-            try {
-                const res = await fetch('https://backend-reportes-excel.onrender.com/inspectores-frecuentes');
-                memoriaInspectores = await res.json();
-                const dl = document.getElementById('listaInspectores');
-                dl.innerHTML = '';
-                memoriaInspectores.forEach(i => {
-                    let opt = document.createElement('option');
-                    opt.value = i.nombre;
-                    dl.appendChild(opt);
-                });
-            } catch (e) { console.error("Error cargando inspectores"); }
-        }
-
-        // Cargar datos al entrar a la sección
-        inicializarParteIII();
-
-        function autoRellenarInspector(sufijo) {
-            const nombre = document.getElementById(`D${sufijo}`).value;
-            const encontrado = memoriaInspectores.find(i => i.nombre === nombre);
             
-            if (encontrado) {
-                document.getElementById(`H${sufijo}`).value = encontrado.cargo || '';
-                document.getElementById(`O${sufijo}`).value = encontrado.empresa || '';
-                document.getElementById(`T${sufijo}`).value = encontrado.dni || '';
-                console.log(`Inspector ${sufijo} auto-rellenado`);
-            }
-        }
-    </script>
+            <!-- SLIDE 0: CARÁTULA -->
+            <div class="slide active">
+                <div class="caratula">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <h1>REPORTES AENOR</h1>
+                    <p>by Anthony chilet</p>
+                    <button class="action btn-next" style="margin: 40px auto 0 auto;" onclick="moveSlide(1)">
+                        EMPEZAR <i class="fa-solid fa-circle-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
 
-    <div class="btn-nav">
-        <button onclick="moveSlide(-1)">Anterior</button>
-        <button onclick="moveSlide(1)">Próximo</button>
-    </div>
-</div>
-
-           <!-- PARTE IV: CHECKLIST (ORDEN MODIFICADO SEGÚN SOLICITUD) -->
+            <!-- PARTE I: COOPERADOR (LÓGICA GIST MANTENIDA) -->
             <div class="slide">
                 <div class="section">
-                    <h2>IV. PREGUNTAS DE VERIFICACIÓN</h2>
+                    <h2><i class="fa-solid fa-building"></i> I. DATOS DEL COOPERADOR</h2>
+                    <div class="grid">
+                        <div>
+                            <label>Razón Social (E11):</label>
+                            <input type="text" id="E11" list="listaCooperadores" oninput="vincularRUC(this.value)" placeholder="Seleccione...">
+                            <datalist id="listaCooperadores"></datalist>
+                        </div>
+                        <div><label>RUC (T11):</label><input type="text" id="T11"></div>
+                    </div>
+                    <script>
+                        let baseDatosCooperadores = [];
+                        async function cargarCooperadores() {
+                            try {
+                                const res = await fetch('https://backend-reportes-excel.onrender.com/cooperadores-frecuentes');
+                                baseDatosCooperadores = await res.json();
+                                const dl = document.getElementById('listaCooperadores');
+                                dl.innerHTML = '';
+                                baseDatosCooperadores.forEach(c => {
+                                    let opt = document.createElement('option');
+                                    opt.value = c.razon_social;
+                                    dl.appendChild(opt);
+                                });
+                            } catch (e) { console.error("Error cooperadores"); }
+                        }
+                        cargarCooperadores();
+                        function vincularRUC(v) {
+                            const match = baseDatosCooperadores.find(c => c.razon_social === v);
+                            if (match) document.getElementById('T11').value = match.ruc;
+                        }
+                        function rellenarEmpresa(id) {
+                            const n = document.getElementById(`D${id}`).value;
+                            const rs = document.getElementById('E11').value;
+                            if (n.trim() !== "" && rs !== "") document.getElementById(`O${id}`).value = rs;
+                        }
+                    </script>
+                    <div id="personal-fields">
+                        <script>
+                            [12, 13, 14, 15, 16].forEach((id, i) => {
+                                document.write(`
+                                    <label style="margin-top:10px; color:var(--morado-principal)">PERSONAL 0${i+1}</label>
+                                    <div class="grid-quad">
+                                        <input type="text" id="D${id}" placeholder="Nombre" onblur="rellenarEmpresa('${id}')">
+                                        <input type="text" id="H${id}" placeholder="Cargo">
+                                        <input type="text" id="O${id}" placeholder="Empresa">
+                                        <input type="text" id="T${id}" placeholder="DNI">
+                                    </div>
+                                `);
+                            });
+                        </script>
+                    </div>
+                </div>
+                <div class="btn-nav"><button class="action btn-prev" onclick="moveSlide(-1)">Anterior</button><button class="action btn-next" onclick="moveSlide(1)">Próximo</button></div>
+            </div>
+
+            <!-- PARTE II: PROYECTO (LÓGICA GIST MANTENIDA) -->
+            <div class="slide">
+                <div class="section">
+                    <h2><i class="fa-solid fa-map-location-dot"></i> II. DATOS DEL PROYECTO Y SITE</h2>
+                    <div class="grid-triple">
+                        <div>
+                            <label>Nombre Site (E20):</label>
+                            <input type="text" id="E20" list="listaSitios" oninput="validarCambioSite(this.value)" placeholder="Escriba...">
+                            <datalist id="listaSitios"></datalist>
+                        </div>
+                        <div><label>Proyecto (L20):</label><input type="text" id="L20"></div>
+                        <div><label>Solución (T20):</label><input type="text" id="T20"></div>
+                    </div>
+                    <div class="grid-triple">
+                        <div><label>Prioridad (E21):</label><input type="text" id="E21"></div>
+                        <div><label>Act. Campo (L21):</label><input type="text" id="L21"></div>
+                        <div><label>MOP (T21):</label><input type="text" id="T21"></div>
+                    </div>
+                    <div class="grid-triple">
+                        <div><label>Dirección (E22):</label><input type="text" id="E22"></div>
+                        <div><label>Act. MOP (L22):</label><input type="text" id="L22"></div>
+                        <div><label>Contrato (T22):</label><input type="text" id="T22"></div>
+                    </div>
+                    <div class="grid">
+                        <div><label>Acceso Cont. (E23):</label><input type="text" id="E23"></div>
+                        <div><label>Comentarios (L23):</label><input type="text" id="L23"></div>
+                    </div>
+                    <div class="grid-triple">
+                        <div>
+                            <label>Distrito (E24):</label>
+                            <input type="text" id="E24" list="listaUbigeo" placeholder="Elegir...">
+                            <datalist id="listaUbigeo"></datalist>
+                        </div>
+                        <div><label>Tipo Sitio (L24):</label><input type="text" id="L24"></div>
+                        <div><label>Servicio (T24):</label><input type="text" id="T24"></div>
+                    </div>
+                </div>
+                <script>
+                    let memoriaSitios = [];
+                    async function inicializarParteII() {
+                        try {
+                            const resS = await fetch('https://backend-reportes-excel.onrender.com/sitios-historicos');
+                            memoriaSitios = await resS.json();
+                            const dlS = document.getElementById('listaSitios');
+                            dlS.innerHTML = ''; memoriaSitios.forEach(s => { let o = document.createElement('option'); o.value = s.nombre_site; dlS.appendChild(o); });
+                            const resU = await fetch('https://backend-reportes-excel.onrender.com/ubigeo-lista');
+                            const uData = await resU.json();
+                            const dlU = document.getElementById('listaUbigeo');
+                            dlU.innerHTML = ''; uData.forEach(u => { let o = document.createElement('option'); o.value = `${u.departamento} / ${u.provincia} / ${u.distrito}`; dlU.appendChild(o); });
+                        } catch (e) { console.error("Error Parte II"); }
+                    }
+                    inicializarParteII();
+                    function validarCambioSite(v) {
+                        const match = memoriaSitios.find(s => s.nombre_site === v);
+                        if (match) {
+                            document.getElementById('L20').value = match.proyecto || '';
+                            document.getElementById('E22').value = match.direccion || '';
+                            document.getElementById('E24').value = match.distrito || '';
+                        }
+                    }
+                </script>
+                <div class="btn-nav"><button class="action btn-prev" onclick="moveSlide(-1)">Anterior</button><button class="action btn-next" onclick="moveSlide(1)">Próximo</button></div>
+            </div>
+
+            <!-- PARTE III: INSPECTOR (LÓGICA GIST MANTENIDA) -->
+            <div class="slide">
+                <div class="section">
+                    <h2><i class="fa-solid fa-user-shield"></i> III. DATOS DEL INSPECTOR</h2>
+                    <label style="color:var(--morado-principal)">INSPECTOR 01</label>
+                    <div class="grid-quad">
+                        <input type="text" id="D28" list="listaInspectores" onblur="autoRellenarInspector('28')" placeholder="Nombre">
+                        <input type="text" id="H28" placeholder="Cargo">
+                        <input type="text" id="O28" placeholder="Empresa">
+                        <input type="text" id="T28" placeholder="DNI">
+                    </div>
+                    <label style="margin-top:10px; color:var(--morado-principal)">INSPECTOR 02</label>
+                    <div class="grid-quad">
+                        <input type="text" id="D29" list="listaInspectores" onblur="autoRellenarInspector('29')" placeholder="Nombre">
+                        <input type="text" id="H29" placeholder="Cargo">
+                        <input type="text" id="O29" placeholder="Empresa">
+                        <input type="text" id="T29" placeholder="DNI">
+                    </div>
+                    <datalist id="listaInspectores"></datalist>
+                    <div class="grid">
+                        <div><label>Fecha Inicio (F30):</label><input type="date" id="F30"></div>
+                        <div><label>Fecha Fin (R30):</label><input type="date" id="R30"></div>
+                    </div>
+                </div>
+                <script>
+                    let memoriaInspectores = [];
+                    async function inicializarParteIII() {
+                        try {
+                            const res = await fetch('https://backend-reportes-excel.onrender.com/inspectores-frecuentes');
+                            memoriaInspectores = await res.json();
+                            const dl = document.getElementById('listaInspectores');
+                            dl.innerHTML = ''; memoriaInspectores.forEach(i => { let o = document.createElement('option'); o.value = i.nombre; dl.appendChild(o); });
+                        } catch (e) { console.error("Error inspectores"); }
+                    }
+                    inicializarParteIII();
+                    function autoRellenarInspector(s) {
+                        const n = document.getElementById(`D${s}`).value;
+                        const match = memoriaInspectores.find(i => i.nombre === n);
+                        if (match) {
+                            document.getElementById(`H${s}`).value = match.cargo || '';
+                            document.getElementById(`O${s}`).value = match.empresa || '';
+                            document.getElementById(`T${s}`).value = match.dni || '';
+                        }
+                    }
+                </script>
+                <div class="btn-nav"><button class="action btn-prev" onclick="moveSlide(-1)">Anterior</button><button class="action btn-next" onclick="moveSlide(1)">Próximo</button></div>
+            </div>
+
+            <!-- PARTE IV: CHECKLIST -->
+            <div class="slide">
+                <div class="section">
+                    <h2><i class="fa-solid fa-list-check"></i> IV. PREGUNTAS DE VERIFICACIÓN</h2>
                     <div id="checklist-container"></div>
                 </div>
-                <div class="btn-nav"><button onclick="moveSlide(-1)">Anterior</button><button onclick="enviarDatos()" style="background:#27ae60">GENERAR EXCEL</button></div>
+                <div class="btn-nav">
+                    <button class="action btn-prev" onclick="moveSlide(-1)">Anterior</button>
+                    <div style="flex-grow: 1; margin-left: 10px;">
+                        <button class="action btn-gen" onclick="enviarDatos()"><i class="fa-solid fa-file-excel"></i> GENERAR EXCEL</button>
+                        <div id="gen-status"></div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- SECCIÓN HISTORIAL -->
         <div id="seccion-historial" style="display:none;">
-            <h2>📋 Historial de Reportes</h2>
+            <h2><i class="fa-solid fa-database"></i> Historial de Reportes</h2>
             <table id="tablaHistorial">
-                <thead>
-                    <tr><th>Fecha</th><th>Site</th><th>Proyecto</th><th>Inspector</th><th>Acción</th></tr>
-                </thead>
+                <thead><tr><th>Fecha</th><th>Site</th><th>Proyecto</th><th>Inspector</th><th>Acción</th></tr></thead>
                 <tbody></tbody>
             </table>
         </div>
-
     </div>
 
     <script>
@@ -303,53 +318,7 @@
             window.scrollTo(0,0);
         }
 
-        const preguntas = [
-            "Presenta fisuras en el concreto",
-            "Presenta desprendimientos",
-            "Presenta humedad",
-            "Presenta grouting",
-            "Presenta óxido",
-            "Presenta tuerca y contra tuerca",
-            "Presenta deformación",
-            "Presenta óxido",
-            "Presenta fisuras en la plancha",
-            "Presenta fisuras en la soldadura",
-            "Presenta pernos faltantes (más del 30%)",
-            "Presenta óxido en los pernos",
-            "Presenta tuerca y contra tuerca",
-            "Presenta óxido en planchas",
-            "Presenta fisuras en la plancha",
-            "Presenta fisuras en la soldadura",
-            "Presenta óxido en montantes",
-            "Presenta óxido en diagonales",
-            "Presenta óxido en redundantes",
-            "Presenta óxido en horizontales",
-            "Presenta óxido en escaleras de acceso y cables",
-            "Presenta óxido en línea de vida",
-            "Presenta óxido en roldanas",
-            "Presenta óxido en soportes",
-            "Presenta corrosión en montantes",
-            "Presenta corrosión en diagonales",
-            "Presenta corrosión en redundantes",
-            "Presenta corrosión en horizontales",
-            "Presenta corrosión en escaleras de acceso y cables",
-            "Presenta corrosión en línea de vida",
-            "Presenta corrosión en roldanas",
-            "Presenta corrosión en soportes",
-            "Presenta pérdida de pintura",
-            "Presenta pérdida de galvanizado",
-            "Presenta deformación visible sobre su eje vertical (mayor al 2%)",
-            "Presenta movimiento perceptible en tope de torre",
-            "Presenta tensión adecuada en vientos",
-            "Presenta fijación adecuada de contravientos",
-            "Línea de vida no presenta continuidad",
-            "Presenta empozamiento de agua",
-            "Presenta filtraciones",
-            "Falta de limpieza",
-            "Acumulación de desperdicios",
-            "Presenta crecimiento de vegetación",
-            "Presenta acumulación de heces de aves"
-        ];
+        const preguntas = ["Presenta fisuras en el concreto","Presenta desprendimientos","Presenta humedad","Presenta grouting","Presenta óxido","Presenta tuerca y contra tuerca","Presenta deformación","Presenta óxido","Presenta fisuras en la plancha","Presenta fisuras en la soldadura","Presenta pernos faltantes (más del 30%)","Presenta óxido en los pernos","Presenta tuerca y contra tuerca","Presenta óxido en planchas","Presenta fisuras en la plancha","Presenta fisuras en la soldadura","Presenta óxido en montantes","Presenta óxido en diagonales","Presenta óxido en redundantes","Presenta óxido en horizontales","Presenta óxido en escaleras de acceso y cables","Presenta óxido en línea de vida","Presenta óxido en roldanas","Presenta óxido en soportes","Presenta corrosión en montantes","Presenta corrosión en diagonales","Presenta corrosión en redundantes","Presenta corrosión en horizontales","Presenta corrosión en escaleras de acceso y cables","Presenta corrosión en línea de vida","Presenta corrosión en roldanas","Presenta corrosión en soportes","Presenta pérdida de pintura","Presenta pérdida de galvanizado","Presenta deformación visible sobre su eje vertical (mayor al 2%)","Presenta movimiento perceptible en tope de torre","Presenta tensión adecuada en vientos","Presenta fijación adecuada de contravientos","Línea de vida no presenta continuidad","Presenta empozamiento de agua","Presenta filtraciones","Falta de limpieza","Acumulación de desperdicios","Presenta crecimiento de vegetación","Presenta acumulación de heces de aves"];
 
         const container = document.getElementById('checklist-container');
         preguntas.forEach((p, i) => {
@@ -368,12 +337,14 @@
         function cambiarSeccion(t) {
             document.getElementById('seccion-app').style.display = (t === 'app' ? 'block' : 'none');
             document.getElementById('seccion-historial').style.display = (t === 'hist' ? 'block' : 'none');
-            document.getElementById('tab-app').classList.toggle('active', t === 'app');
-            document.getElementById('tab-hist').classList.toggle('active', t === 'hist');
+            document.getElementById('tab-app').className = (t === 'app' ? 'active' : '');
+            document.getElementById('tab-hist').className = (t === 'hist' ? 'active' : '');
             if(t === 'hist') cargarHistorial();
         }
 
         async function enviarDatos() {
+            const status = document.getElementById('gen-status');
+            status.innerHTML = '<span class="loading">Cargando reporte...</span>';
             const data = {};
             const ids = ["E11","T11","D12","H12","O12","T12","D13","H13","O13","T13","D14","H14","O14","T14","D15","H15","O15","T15","D16","H16","O16","T16","E20","L20","T20","E21","L21","T21","E22","L22","T22","E23","L23","E24","L24","T24","D28","H28","O28","T28","D29","H29","O29","T29","F30","R30"];
             ids.forEach(id => { data[id] = document.getElementById(id).value; });
@@ -382,7 +353,6 @@
                 data[`I_P${i}`] = document.getElementById(`I_P${i}`).value;
                 data[`K_P${i}`] = document.getElementById(`K_P${i}`).value;
             }
-
             try {
                 const res = await fetch('https://backend-reportes-excel.onrender.com/generar-reporte', {
                     method: 'POST',
@@ -392,11 +362,10 @@
                 if(res.ok) {
                     const b = await res.blob();
                     const a = document.createElement('a');
-                    a.href = window.URL.createObjectURL(b);
-                    a.download = `Reporte_${data.E20}.xlsx`;
-                    a.click();
+                    a.href = window.URL.createObjectURL(b); a.download = `Reporte_${data.E20}.xlsx`; a.click();
+                    status.innerHTML = '<span class="success">Tu reporte se generó correctamente.</span>';
                 }
-            } catch(e) { alert("Error de servidor"); }
+            } catch(e) { status.innerHTML = '<span style="color:red">Error servidor</span>'; }
         }
 
         async function cargarHistorial() {
@@ -410,7 +379,7 @@
                     tbody.innerHTML += `<tr>
                         <td>${new Date(r.fecha_registro).toLocaleString()}</td>
                         <td>${r.nombre_site}</td><td>${r.proyecto}</td><td>${r.inspector_nombre}</td>
-                        <td><button onclick="window.location.href='https://backend-reportes-excel.onrender.com/regenerar-excel/${r.id}'" style="background:#27ae60; padding:5px;">📥</button></td>
+                        <td><button onclick="window.location.href='https://backend-reportes-excel.onrender.com/regenerar-excel/${r.id}'" style="background:var(--morado-difuminado); color:white; border:none; padding:5px; border-radius:5px; cursor:pointer"><i class="fa-solid fa-download"></i></button></td>
                     </tr>`;
                 });
             } catch(e) { tbody.innerHTML = '<td>Error</td>'; }
@@ -418,4 +387,3 @@
     </script>
 </body>
 </html>
-
